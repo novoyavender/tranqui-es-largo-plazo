@@ -29,7 +29,7 @@ a{color:var(--accent-txt)}
 .aviso::before{content:"[!] ";color:var(--accent-txt);font-weight:700}
 .aviso b{font-weight:700}
 
-.wrap{max-width:780px;margin:0 auto;padding-inline:16px;padding-block:28px 56px}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:28px 56px}
 
 header.top{display:flex;flex-direction:column;gap:6px;margin-bottom:22px}
 .marca{font-family:var(--f-mono);font-size:12.5px;color:var(--muted)}
@@ -93,7 +93,10 @@ h1::after{content:"_";color:var(--accent-txt);margin-left:.05em;animation:cursor
 .informe h3{font-size:14px;font-weight:700;margin:20px 0 6px}
 .informe h3::before{content:"### ";color:var(--accent-txt)}
 .informe .parte{font-family:var(--f-mono);font-size:14px;font-weight:700;color:var(--accent-txt);margin:40px 0 0;padding-top:12px;border-top:1px solid var(--accent)}
-.informe p,.informe li{max-width:68ch}
+.informe p,.informe li{max-width:none}
+.informe p,.informe li,.razon,.caja p{text-align:left;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
+@media (min-width:600px){.informe p,.informe li,.razon,.caja p{text-align:justify;text-justify:inter-word}}
+.informe .caja-t,.informe .parte{text-align:left}
 .informe ul,.informe ol{padding-left:22px}
 .informe ul li::marker{content:"> ";color:var(--accent-txt)}
 .informe ol li::marker{color:var(--accent-txt)}
@@ -134,7 +137,7 @@ body{min-height:calc(100vh - env(safe-area-inset-top,0px));min-height:calc(100dv
 <body>
 
 
-<div class="wrap">
+<div class="wrap" lang="es">
   <header class="top">
     <h1>Tranqui, <em>es largo plazo</em></h1>
     <p class="boot">
@@ -189,8 +192,8 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
 <div class="caja">
 <p class="caja-t">Resumen ejecutivo</p>
 <p>Sterling mueve tierra: prepara los terrenos donde se construyen centros de datos, fábricas de semiconductores y depósitos, y además hace rutas y obra residencial. En 2026 su guidance de ingresos pasó de 3.050–3.200 millones (febrero) a 4.000–4.150 (agosto), con backlog firmado de 4.234 millones y caja neta.</p>
-<p><b>QUÉ: sí.</b> Sin dilución (+0,7% anual), caja neta, 5 años de mejora en ingresos, márgenes y UPA, y 22 trimestres seguidos superando la UPA estimada. Reparos: valuación exigente sobre FCF, dependencia del ciclo de inversión en IA y mezcla hacia electricidad (menor margen).</p>
-<p><b>CUÁNDO: neutro.</b> Cayó 48% desde el pico de junio (993,74) y lateraliza entre 456 y 611 desde agosto; está apenas debajo de la media de 50 ruedas y 7,6% debajo de la de 200 (aprox.).</p>
+<p><b>QUÉ comprar (análisis fundamental): fundamentos sólidos.</b> Sin dilución (+0,7% anual), caja neta, 5 años de mejora en ingresos, márgenes y UPA, y 22 trimestres seguidos superando la UPA estimada. Reparos: valuación exigente sobre FCF, dependencia del ciclo de inversión en IA y mezcla hacia electricidad (menor margen).</p>
+<p><b>CUÁNDO comprar (análisis técnico): momento neutro.</b> Cayó 48% desde el pico de junio (993,74) y lateraliza entre 456 y 611 desde agosto; está apenas debajo de la media de 50 ruedas y 7,6% debajo de la de 200 (aprox.).</p>
 <p><b>Reverse DCF:</b> a 513, el mercado descuenta que el FCF crece 13,8% anual durante 10 años (WACC 10%) o 19,9% (WACC 13%). Con P/E forward 2027 de 20,2x cotiza parecido a EME (21,5x) con más crecimiento esperado.</p>
 <p>A 12 meses: E[r] +7,7%, no robusto. A 5 años: +42,9%, robusto.</p>
 <p><b>Criterio principal para invalidar la tesis:</b> backlog firmado en baja dos trimestres seguidos o margen bruto bajo 24% dos trimestres.</p>
@@ -211,9 +214,10 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
 </table></div>
 
 <h2>2. Par elegido: EMCOR (EME)</h2>
+<p>El par es la empresa contra la que se compara STRL a lo largo de todo el informe. Funciona como referencia: los márgenes, el balance, la rentabilidad y la valuación de STRL se interpretan mejor al ponerlos al lado de un competidor del mismo sector.</p>
 <p>EME es el contratista de servicios de construcción más sólido de EE.UU. por retorno sobre capital y balance (caja neta, ROIC de ~41%), con fuerte exposición a centros de datos a través de electricidad y mecánica. Es "par fuerte": referencia de calidad, no un igual. Diferencias que sesgan: EME es multioficio y factura ~6,8 veces más; STRL es obra civil y preparación de sitios con más margen y menos rotación. Alternativa: Comfort Systems (FIX), más parecida en centros de datos pero 3,7 veces más grande.</p>
 
-<p class="parte">Parte I · QUÉ comprar (balance y datos de la empresa)</p>
+<p class="parte">Parte I · QUÉ comprar: análisis fundamental (balance y datos de la empresa)</p>
 
 <h2>3. Negocio y unit economics</h2>
 <p>Tres segmentos (10-Q 2T26):</p>
@@ -407,10 +411,10 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
 <li>En los últimos 5 años el FCF creció 34,1% anual (112 → 363), con el viento de cola de los centros de datos. El precio no exige repetir eso, pero sí que el ciclo dure una década.</li>
 </ul>
 <p><b>Lectura:</b> por FCF la acción no está barata (el FCF crece menos que la utilidad por el capex en suba y porque la utilidad ajustada excluye amortizaciones). Por P/E forward 2027 cotiza en línea con EME con el doble de crecimiento. La diferencia entre el DCF (435) y el consenso (742) es de 70%: el consenso proyecta múltiplos estables y UPA en suba; el DCF castiga que el FCF todavía sea 3% de la capitalización (482 / 15.692).</p>
-<div class="caja"><p class="caja-t">Veredicto QUÉ: sí</p>
+<div class="caja"><p class="caja-t">Veredicto QUÉ comprar: fundamentos sólidos</p>
 <p>Sin banderas rojas: dilución neta mínima, caja neta y mejora de cinco años. Reparos: valuación sobre FCF, ciclo de centros de datos sin valle en la muestra, goodwill e intangibles de 94% del patrimonio, mezcla de menor margen.</p></div>
 
-<p class="parte">Parte II · CUÁNDO comprar (estado del gráfico)</p>
+<p class="parte">Parte II · CUÁNDO comprar: análisis técnico (estado del gráfico)</p>
 
 <h2>14. Indicadores</h2>
 <p>Serie diaria de 100 ruedas (19-may a 9-oct-2026) y semanal desde 2003 (Alpha Vantage).</p>
@@ -436,7 +440,7 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
 <li><b>Soportes:</b> 491 a 498 (mínimos de fines de septiembre) y 456 (mínimo de 52 semanas recientes). <b>Resistencias:</b> 555 a 564 (media de 40 semanas y máximo del 6-oct) y 604 a 611 (agosto).</li>
 <li><b>Historial de caídas:</b> dos caídas de ~47% en cierres semanales en 18 meses (nov-2024 a abr-2025 y jun-2026 a ago-2026). Es una acción que cae fuerte aun con resultados buenos.</li>
 </ul>
-<div class="caja"><p class="caja-t">Veredicto CUÁNDO: neutro</p>
+<div class="caja"><p class="caja-t">Veredicto CUÁNDO comprar: momento neutro</p>
 <p>El precio está en un rango sin tendencia clara, con mínimos levemente crecientes pero debajo de la media de 40 semanas.</p>
 <ul>
 <li><b>Pasa a favorable:</b> cierre semanal sobre 564 (recupera la media de 40 semanas) y luego sobre 611 con volumen.</li>
@@ -558,8 +562,8 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
 <h2>24. Filtro del Viejo</h2>
 <ul class="check">
 <li>Más de un dato respalda la tesis (10-K, 10-Q, tres comunicados, consenso de dos proveedores)</li>
-<li>Contrastada con las finanzas (QUÉ: sí)</li>
-<li class="x">El momento del gráfico acompaña (CUÁNDO: neutro)</li>
+<li>Contrastada con las finanzas (QUÉ comprar: fundamentos sólidos)</li>
+<li class="x">El momento del gráfico acompaña (CUÁNDO comprar: momento neutro)</li>
 <li>Escenarios mayoritariamente positivos (en la base; a 12 meses no resiste la robustez)</li>
 <li>Sin dilución seguida</li>
 <li>Deuda manejable</li>
@@ -596,12 +600,41 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
 <p class="cierre">NO es recomendación de inversión.</p>
 </template>
 
+<!-- Criterios: se insertan en cada informe, después del resumen ejecutivo -->
+<template id="criterios">
+<h2>Cómo leer este informe: criterios y banderas</h2>
+<p>Cada informe responde dos preguntas por separado, porque una empresa puede tener buenos fundamentos y aun así no estar en un buen momento de precio.</p>
+<h3>Los dos veredictos</h3>
+<ul>
+<li><b>QUÉ comprar (análisis fundamental):</b> mira balance, resultados, flujos de caja, deuda y dilución. <b>Fundamentos sólidos</b> si no aparece ninguna bandera roja; <b>fundamentos mixtos</b> si aparece una; <b>fundamentos débiles</b> si aparecen dos o más.</li>
+<li><b>CUÁNDO comprar (análisis técnico):</b> mira el gráfico de precios. <b>Momento favorable</b> con tendencia alcista consolidada, o una base seguida de ruptura con volumen, sin sobreextensión; <b>momento neutro</b> si el precio se mueve en un rango sin tendencia clara; <b>momento desfavorable</b> con tendencia bajista, pérdida de soportes importantes o sobreextensión extrema.</li>
+</ul>
+<h3>Banderas rojas</h3>
+<p>Son los tres problemas que descalifican los fundamentos. Cuando el texto dice "sin bandera", significa que ese punto se revisó y el problema no apareció.</p>
+<ul>
+<li><b>Bandera (a): dilución seguida de acciones.</b> Se mide la variación anual de las acciones diluidas, neta de recompras. Es bandera roja con 3% o más por año en 3 de los últimos 5 años, con 5% o más en 2 años, o con una emisión única de 10% o más para financiar caja o pérdidas. Entre 1,5% y 3% anual sostenido cuenta como reparo; menos de 1,5% no es bandera.</li>
+<li><b>Bandera (b): deuda inmanejable a futuro.</b> Se revisan la deuda neta, la cobertura de intereses y los vencimientos de los próximos 5 años contra la caja y el flujo esperado. Se completa con una prueba de estrés (por ejemplo, ingresos en baja) para ver si los pagos siguen cerrando.</li>
+<li><b>Bandera (c): sin mejora constante del negocio en 5 años.</b> Ingresos, márgenes, flujo de caja y ganancia por acción tienen que mejorar en la mayoría de los años, no en uno solo. En negocios cíclicos se compara pico con pico y valle con valle.</li>
+</ul>
+<h3>Banderas verdes (Filtro del Viejo)</h3>
+<p>Son los puntos a favor que se repasan al final de cada informe:</p>
+<ul>
+<li>La tesis se sostiene en más de un dato y no es pura especulación.</li>
+<li>Está contrastada con las finanzas (veredicto QUÉ comprar).</li>
+<li>El momento del gráfico acompaña (veredicto CUÁNDO comprar).</li>
+<li>Los escenarios futuros son mayoritariamente positivos: los escenarios con ganancia suman 50% o más de probabilidad y el retorno esperado ponderado es positivo, a mediano y largo plazo.</li>
+<li>Sin dilución seguida, deuda manejable y mejora constante en 5 años (las tres banderas rojas, superadas).</li>
+</ul>
+<p>Horizontes: corto plazo, hasta 3 meses; mediano plazo, de 3 a 12 meses; largo plazo, de 1 a 10 años.</p>
+</template>
+
 <script>
 (function(){
   const MESES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
   const fmt=f=>{const [y,m,d]=f.split("-");return `${+d}-${MESES[+m-1]}-${y}`;};
   const ETQ={si:"Sí",no:"No",neutro:"Neutro"};
   const ETQ_QUE={si:"Fundamentos sólidos",neutro:"Fundamentos mixtos",no:"Fundamentos débiles"};
+  const ETQ_CUANDO={si:"Momento favorable",neutro:"Momento neutro",no:"Momento desfavorable"};
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
   const informes=[...document.querySelectorAll("template.informe-src")].map(t=>{
@@ -618,7 +651,7 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
 
   const veredictos=r=>`<div class="veredictos">
     <div class="vd"><span class="vd-l">QUÉ comprar <small>· análisis fundamental</small></span><span class="tag ${r.que}">${ETQ_QUE[r.que]||r.que}</span><p class="razon">${esc(r.queRazon)}</p></div>
-    <div class="vd"><span class="vd-l">CUÁNDO comprar <small>· análisis técnico</small></span><span class="tag ${r.cuando}">${ETQ[r.cuando]||r.cuando}</span><p class="razon">${esc(r.cuandoRazon)}</p></div>
+    <div class="vd"><span class="vd-l">CUÁNDO comprar <small>· análisis técnico</small></span><span class="tag ${r.cuando}">${ETQ_CUANDO[r.cuando]||r.cuando}</span><p class="razon">${esc(r.cuandoRazon)}</p></div>
   </div>`;
 
   function pintarChips(){
@@ -652,7 +685,10 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
         <span class="tk">${esc(r.ticker)}</span>
         <div><span class="emp">${esc(r.empresa)}</span> · <span class="fecha" style="margin:0">${fmt(r.fecha)}</span></div>
         ${veredictos(r)}</div><article class="informe"></article>`;
-      $("detalle").querySelector(".informe").appendChild(r.tpl.content.cloneNode(true));
+      const inf=$("detalle").querySelector(".informe");
+      inf.appendChild(r.tpl.content.cloneNode(true));
+      const crit=document.getElementById("criterios");
+      if(crit){const c=crit.content.cloneNode(true);const res=inf.querySelector(".caja");res?res.after(c):inf.prepend(c);}
       avisoFecha.textContent=`Datos al ${fmt(r.fecha)}`;
       window.scrollTo(0,0);
     } else pintarLista();
