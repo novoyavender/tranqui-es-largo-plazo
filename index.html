@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding:env(safe-area-inset-top,0px) 0 0}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Tranqui, es largo plazo</title>
+<style>
+/* Layout: aviso fijo arriba, columna única de lectura (~760px); lista de tarjetas → informe abierto en la misma página
+   Estética: consola. Fondo negro, contrastes bordó, todo en Consolas con fuentes del sistema (sin conexiones externas). Tema oscuro único. */
+:root{
+  --bg:#050303; --surface:#0b0605; --ink:#e8dedb; --muted:#a08c88; --line:#3a1410;
+  --accent:#8a1812; --accent-txt:#e0372b; --bordo:#4a0b08;
+  --si:#5fd38a; --no:#f0705f; --neutro:#e8b04a; --warn-bg:#1a0a08;
+  --f-display:Consolas,"Cascadia Mono","Cascadia Code",Menlo,"DejaVu Sans Mono","Liberation Mono","Courier New",monospace;
+  --f-body:Consolas,"Cascadia Mono","Cascadia Code",Menlo,"DejaVu Sans Mono","Liberation Mono","Courier New",monospace;
+  --f-mono:Consolas,"Cascadia Mono","Cascadia Code",Menlo,"DejaVu Sans Mono","Liberation Mono","Courier New",monospace;
+  color-scheme:dark;
+}
+::selection{background:var(--bordo);color:var(--ink)}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.65}
+a{color:var(--accent-txt)}
+:focus-visible{outline:2px solid var(--accent-txt);outline-offset:2px}
+
+.aviso{position:sticky;bottom:env(safe-area-inset-bottom,0px);z-index:10;background:var(--bordo);color:var(--ink);border-top:1px solid var(--accent);
+  font-size:12.5px;padding:8px 16px;text-align:left}
+.aviso::before{content:"[!] ";color:var(--accent-txt);font-weight:700}
+.aviso b{font-weight:700}
+
+.wrap{max-width:780px;margin:0 auto;padding-inline:16px;padding-block:28px 56px}
+
+header.top{display:flex;flex-direction:column;gap:6px;margin-bottom:22px}
+.marca{font-family:var(--f-mono);font-size:12.5px;color:var(--muted)}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(24px,6.6vw,40px);line-height:1.1;margin:0;letter-spacing:-.02em;overflow-wrap:anywhere}
+h1 em{font-style:normal;color:var(--accent-txt)}
+h1::after{content:"_";color:var(--accent-txt);margin-left:.05em;animation:cursor 1.1s steps(1) infinite}
+@keyframes cursor{50%{opacity:0}}
+.boot{margin:10px 0 0;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:2px}
+.boot span::before{content:"> ";color:var(--accent-txt)}
+.boot b{color:var(--ink);font-weight:400}
+
+.controles{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.prompt{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);padding:0 12px}
+.prompt:focus-within{border-color:var(--accent-txt)}
+.prompt label{color:var(--accent-txt);white-space:nowrap}
+.buscar{flex:1;min-width:0;font:inherit;padding:11px 0;border:0;background:transparent;color:var(--ink);caret-color:var(--accent-txt);outline:none}
+.buscar::placeholder{color:var(--muted)}
+.filtro{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.filtro-l{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;padding:3px 6px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.chip::before{content:"["}
+.chip::after{content:"]"}
+.chip:hover{color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--bordo);color:var(--ink)}
+.cuenta{font-size:13px;color:var(--muted)}
+
+.lista{display:flex;flex-direction:column;gap:12px;list-style:none;margin:0;padding:0}
+.card{display:block;width:100%;text-align:left;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;cursor:pointer;transition:border-color .15s}
+.card:hover{border-color:var(--accent-txt)}
+.card-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.tk{font-family:var(--f-display);font-weight:700;font-size:22px;letter-spacing:-.01em}
+.card .tk::before{content:"> ";color:var(--accent-txt)}
+.emp{font-weight:500}
+.fecha{margin-left:auto;font-family:var(--f-mono);font-size:12.5px;color:var(--muted)}
+.meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.veredictos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media (max-width:520px){.veredictos{grid-template-columns:1fr}}
+.vd{min-width:0;display:flex;flex-direction:column;gap:6px}
+.tag{align-self:flex-start;font-family:var(--f-mono);font-size:13px;font-weight:700;padding:2px 4px;border:0}
+.tag::before{content:"[ "}
+.tag::after{content:" ]"}
+.tag.si{color:var(--si);background:color-mix(in srgb,var(--si) 12%,transparent)}
+.tag.no{color:var(--no);background:color-mix(in srgb,var(--no) 12%,transparent)}
+.tag.neutro{color:var(--neutro);background:color-mix(in srgb,var(--neutro) 12%,transparent)}
+.razon{font-size:13px;color:var(--muted);margin:0}
+.razon::before{content:"// ";color:var(--accent-txt)}
+.vacio{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
+
+/* Detalle */
+.volver{font:inherit;font-size:14px;background:none;border:0;color:var(--accent-txt);cursor:pointer;padding:4px 0;margin-bottom:14px}
+.det-head{display:flex;flex-direction:column;gap:6px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.det-head .tk{font-size:clamp(34px,8vw,48px);line-height:1}
+.det-head .veredictos{margin-top:8px}
+
+.informe{min-width:0}
+.informe h2{font-family:var(--f-display);font-weight:700;font-size:17px;margin:30px 0 8px;text-wrap:balance}
+.informe h2::before{content:"## ";color:var(--accent-txt)}
+.informe h3{font-size:14px;font-weight:700;margin:20px 0 6px}
+.informe h3::before{content:"### ";color:var(--accent-txt)}
+.informe .parte{font-family:var(--f-mono);font-size:14px;font-weight:700;color:var(--accent-txt);margin:40px 0 0;padding-top:12px;border-top:1px solid var(--accent)}
+.informe p,.informe li{max-width:68ch}
+.informe ul,.informe ol{padding-left:22px}
+.informe ul li::marker{content:"> ";color:var(--accent-txt)}
+.informe ol li::marker{color:var(--accent-txt)}
+.informe li{margin:4px 0}
+.ficha{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13.5px;margin:12px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.ficha dt{color:var(--muted);font-family:var(--f-mono);font-size:12px;padding-top:2px}
+.ficha dd{margin:0;min-width:0}
+.caja{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:12px 0}
+.caja.alerta{background:var(--warn-bg);border-color:color-mix(in srgb,var(--neutro) 45%,transparent)}
+.caja-t{font-weight:700;margin:0 0 6px;font-size:14px}
+.caja-t::before{content:"[ ";color:var(--accent-txt)}
+.caja-t::after{content:" ]";color:var(--accent-txt)}
+.tw{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tw table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+.tw th,.tw td{padding:8px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.tw th{font-family:var(--f-mono);font-size:12.5px;font-weight:700;color:var(--accent-txt);white-space:nowrap}
+.tw tr:last-child td{border-bottom:0}
+.tw td.n{white-space:nowrap}
+code{font-family:var(--f-mono);font-size:.9em}
+.check{list-style:none;padding-left:0}
+.check li::before{content:"[x]";color:var(--si);font-weight:700;margin-right:8px}
+.check li.x::before{content:"[ ]";color:var(--neutro)}
+.cierre{font-weight:600;margin-top:28px}
+.pie{margin-top:40px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+*{border-radius:0!important}
+.tw th{border-bottom-color:var(--accent)}
+.marca::before{content:"$ ";color:var(--accent-txt)}
+.pie::before{content:"# ";color:var(--accent-txt)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<style>
+/* Barra de aviso pegada al borde inferior, sin espacio debajo */
+body{min-height:calc(100vh - env(safe-area-inset-top,0px));min-height:calc(100dvh - env(safe-area-inset-top,0px));display:flex;flex-direction:column}
+.wrap{flex:1 0 auto;width:100%}
+.aviso{position:sticky;bottom:0;margin-top:auto;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <h1>Tranqui, <em>es largo plazo</em></h1>
+    <p class="boot">
+      <span>qué comprar: lo que dice el balance</span>
+      <span>cuándo comprar: lo que dice el gráfico</span>
+      <span>informes cargados: <b id="n-inf">0</b></span>
+    </p>
+  </header>
+
+  <main id="vista-lista">
+    <div class="controles">
+      <div class="prompt"><label for="q">buscar&gt;</label><input id="q" class="buscar" type="search" placeholder="ticker, empresa o palabra del informe" autocomplete="off"></div>
+      <div class="filtro"><span class="filtro-l">filtro --ticker</span><div class="chips" id="chips" role="group" aria-label="Filtrar por ticker"></div></div>
+      <span class="cuenta" id="cuenta"></span>
+    </div>
+    <ul class="lista" id="lista"></ul>
+  </main>
+
+  <main id="vista-detalle" hidden>
+    <button class="volver" id="volver" type="button">&lt; volver a la lista</button>
+    <div id="detalle"></div>
+  </main>
+
+</div>
+
+<div class="aviso" role="note"><b>Contenido educativo, no es recomendación de inversión.</b> <span id="aviso-fecha">Datos al 10-oct-2026</span></div>
+
+<!-- ============ INFORMES ============
+Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y el contenido. -->
+
+<template class="informe-src"
+  data-id="strl-2026-10-10"
+  data-ticker="STRL"
+  data-empresa="Sterling Infrastructure, Inc."
+  data-par="EME"
+  data-fecha="2026-10-10"
+  data-tipo="Deep research"
+  data-que="si"
+  data-que-razon="Sin dilución, caja neta y cinco años de mejora en ingresos, márgenes y UPA. Reparo: valuación exigente sobre FCF y dependencia del ciclo de IA."
+  data-cuando="neutro"
+  data-cuando-razon="Lateral entre 456 y 611 desde agosto; apenas debajo de la media de 50 ruedas y 7,6% debajo de la de 200.">
+
+<dl class="ficha">
+  <dt>Precio de referencia</dt><dd>513,00 USD (cierre 9-oct-2026; Alpha Vantage y Stock Analysis)</dd>
+  <dt>Consenso</dt><dd>Mediana 742 (5 objetivos fechados); 754 mediana y 836,57 promedio según S&amp;P Global (8 analistas)</dd>
+  <dt>DCF base</dt><dd>435 (WACC 10%). Reverse DCF: FCF +13,8% anual por 10 años</dd>
+  <dt>E[r] 12 meses</dt><dd>+7,7% (no robusto)</dd>
+  <dt>Confianza</dt><dd>Media-alta</dd>
+  <dt>Verificación</dt><dd>Cifras nuevas chequeadas por el autor contra 10-K, 10-Q y comunicados; sin revisor independiente</dd>
+</dl>
+
+<div class="caja">
+<p class="caja-t">Resumen ejecutivo</p>
+<p>Sterling mueve tierra: prepara los terrenos donde se construyen centros de datos, fábricas de semiconductores y depósitos, y además hace rutas y obra residencial. En 2026 su guidance de ingresos pasó de 3.050–3.200 millones (febrero) a 4.000–4.150 (agosto), con backlog firmado de 4.234 millones y caja neta.</p>
+<p><b>QUÉ: sí.</b> Sin dilución (+0,7% anual), caja neta, 5 años de mejora en ingresos, márgenes y UPA, y 22 trimestres seguidos superando la UPA estimada. Reparos: valuación exigente sobre FCF, dependencia del ciclo de inversión en IA y mezcla hacia electricidad (menor margen).</p>
+<p><b>CUÁNDO: neutro.</b> Cayó 48% desde el pico de junio (993,74) y lateraliza entre 456 y 611 desde agosto; está apenas debajo de la media de 50 ruedas y 7,6% debajo de la de 200 (aprox.).</p>
+<p><b>Reverse DCF:</b> a 513, el mercado descuenta que el FCF crece 13,8% anual durante 10 años (WACC 10%) o 19,9% (WACC 13%). Con P/E forward 2027 de 20,2x cotiza parecido a EME (21,5x) con más crecimiento esperado.</p>
+<p>A 12 meses: E[r] +7,7%, no robusto. A 5 años: +42,9%, robusto.</p>
+<p><b>Criterio principal para invalidar la tesis:</b> backlog firmado en baja dos trimestres seguidos o margen bruto bajo 24% dos trimestres.</p>
+</div>
+
+<h2>1. Snapshot</h2>
+<div class="tw"><table>
+<tr><th>Dato</th><th>Valor</th><th>Fuente</th><th>Fecha</th></tr>
+<tr><td>Precio</td><td>513,00 (-1,04% en el día)</td><td>Alpha Vantage; Stock Analysis</td><td class="n">cierre 9-oct-2026</td></tr>
+<tr><td>Acciones en circulación</td><td>30.588.518</td><td>10-Q (portada, vía API XBRL de la SEC)</td><td class="n">31-jul-2026</td></tr>
+<tr><td>Acciones diluidas promedio</td><td>31,14 millones</td><td>10-Q 2T26</td><td class="n">2T26</td></tr>
+<tr><td>Capitalización</td><td>15.692 millones (513 x 30,59)</td><td>cálculo</td><td class="n">9-oct-2026</td></tr>
+<tr><td>EV</td><td>15.511 millones (15.692 + deuda 283,9 - caja 464,5)</td><td>cálculo</td><td class="n">9-oct-2026</td></tr>
+<tr><td>Rango de 52 semanas</td><td>281,58 a 1.005,68 (intradía)</td><td>Alpha Vantage semanal</td><td class="n">9-oct-2026</td></tr>
+<tr><td>Ingresos 12 meses</td><td>3.438 millones</td><td>Stock Analysis</td><td class="n">jun-2026</td></tr>
+<tr><td>Guidance 2026</td><td>Ingresos 4.000–4.150; UPA ajustada 19,70–20,30; UPA GAAP 17,25–17,85</td><td>Comunicado 2T26</td><td class="n">3-ago-2026</td></tr>
+<tr><td>Próximo reporte</td><td>Sin fecha confirmada (estimado 2-nov-2026)</td><td>Stock Analysis; sin anuncio de la empresa al 10-oct</td><td class="n">10-oct-2026</td></tr>
+</table></div>
+
+<h2>2. Par elegido: EMCOR (EME)</h2>
+<p>EME es el contratista de servicios de construcción más sólido de EE.UU. por retorno sobre capital y balance (caja neta, ROIC de ~41%), con fuerte exposición a centros de datos a través de electricidad y mecánica. Es "par fuerte": referencia de calidad, no un igual. Diferencias que sesgan: EME es multioficio y factura ~6,8 veces más; STRL es obra civil y preparación de sitios con más margen y menos rotación. Alternativa: Comfort Systems (FIX), más parecida en centros de datos pero 3,7 veces más grande.</p>
+
+<p class="parte">Parte I · QUÉ comprar (balance y datos de la empresa)</p>
+
+<h2>3. Negocio y unit economics</h2>
+<p>Tres segmentos (10-Q 2T26):</p>
+<div class="tw"><table>
+<tr><th>Segmento</th><th>Ingresos 2T26</th><th>vs 2T25</th><th>Margen operativo 2T26</th><th>Qué hace</th></tr>
+<tr><td>E-Infrastructure</td><td>905,0</td><td>+192%</td><td class="n">23,3% (27,0% en 2T25)</td><td>Movimiento de suelo y preparación de sitios para centros de datos, fábricas, depósitos; electricidad (CEC)</td></tr>
+<tr><td>Transportation</td><td>156,7</td><td>-20%</td><td class="n">18,0% (13,2%)</td><td>Rutas, puentes, aeropuertos (clientes: departamentos de transporte estatales)</td></tr>
+<tr><td>Building</td><td>106,5</td><td>-1%</td><td class="n">8,0% (9,2%)</td><td>Losas y fundaciones para viviendas</td></tr>
+</table></div>
+<p><b>Cómo gana plata:</b> cobra por obra (precio unitario fijo o suma alzada), con contratos de 6 a 36 meses. El margen alto de E-Infrastructure viene de trabajo escaso y urgente: el cliente (hiperescaladores, fabricantes de chips) paga por velocidad y por un contratista capaz de mover millones de metros cúbicos a tiempo. Al cierre de 2025, el trabajo "mission-critical" (centros de datos, manufactura y semiconductores) era 84% del backlog de E-Infrastructure (comunicado del 25-feb-2026).</p>
+<h3>Backlog (10-Q y comunicado 2T26)</h3>
+<ul>
+<li>Backlog firmado (RPO): 4.233,6 al 30-jun-2026 (3.010,9 al 31-dic-2025: +40,6% en seis meses). El comunicado informa 4.330 (+116% interanual; +50% orgánico). ~74% se convertiría en ingresos en 12 meses.</li>
+<li>Adjudicaciones no firmadas: 1.280 (1.240 de CEC y Stone Ridge). Backlog combinado: 5.620 (+150%; +36% orgánico).</li>
+<li>Book-to-burn del 2T26 (sin Stone Ridge): 1,4x firmado, 1,3x combinado. Pipeline de fases futuras: más de 1.400.</li>
+</ul>
+<p><b>Concentración (10-K 2025):</b> ningún cliente supera 10% de los ingresos consolidados. Los 4 mayores clientes de E-Infrastructure fueron 27% del segmento en 2025 (31% en 2024 y 40% en 2023): la concentración baja. En Transportation, los 4 mayores DOT estatales fueron 58% (47% en 2024).</p>
+<p><b>Empleados:</b> ~4.400 al 31-dic-2025 (1.200 asalariados y 3.200 por hora), 4% sindicalizados (10-K).</p>
+
+<h2>4. Resultados y track record de guidance</h2>
+<div class="tw"><table>
+<tr><th>Trimestre</th><th>Ingresos</th><th>UPA ajustada real</th><th>UPA estimada</th><th>Sorpresa</th></tr>
+<tr><td>3T25</td><td>n/d</td><td>3,48</td><td>2,84</td><td>+22,5%</td></tr>
+<tr><td>4T25</td><td>n/d</td><td>3,08</td><td>2,52</td><td>+22,2%</td></tr>
+<tr><td>1T26</td><td>825,7</td><td>3,59</td><td>2,19</td><td>+63,9%</td></tr>
+<tr><td>2T26</td><td>1.168,2</td><td class="n">5,60 (AV) / 5,80 (empresa)</td><td>5,00</td><td>+12%</td></tr>
+</table></div>
+<p>Fuente de UPA y estimados: Alpha Vantage, resultados trimestrales (consultado 10-oct-2026). <b>22 trimestres seguidos con UPA por encima del estimado</b> (del 1T21 al 2T26; el último miss fue el 4T20). La diferencia 5,60 contra 5,80 del 2T26 es de definición del proveedor.</p>
+<h3>Guidance 2026, tres subas en seis meses</h3>
+<div class="tw"><table>
+<tr><th>Fecha</th><th>Ingresos</th><th>UPA ajustada</th><th>EBITDA ajustado</th><th>Fuente</th></tr>
+<tr><td class="n">25-feb-2026</td><td>3.050–3.200</td><td>13,45–14,05</td><td>626–659</td><td>8-K Ex. 99.1</td></tr>
+<tr><td class="n">4-may-2026</td><td>3.700–3.800</td><td>18,40–19,05</td><td>843–873</td><td>8-K Ex. 99.1</td></tr>
+<tr><td class="n">3-ago-2026</td><td>4.000–4.150</td><td>19,70–20,30</td><td>891–916</td><td>Comunicado</td></tr>
+</table></div>
+<p>Punto medio de UPA ajustada: 13,75 → 20,00 (+45%). Parte viene de adquisiciones (Stone Ridge cerró el 1-jun-2026), pero el crecimiento orgánico del 2T26 fue ~49%: (1.168,2 - 250,8 adquirido) / 614,5 - 1.</p>
+<p><b>Reacción del precio:</b> 4-ago-2026, día después del 2T26 (beat y guidance elevada): -11,4% (611,47 → 541,62, volumen 2,1 millones, 4 veces lo normal). El mercado castigó la caída del margen de E-Infrastructure (27,0% → 23,3%) por la mezcla de electricidad.</p>
+<p><b>Próximo trimestre (3T26):</b> consenso UPA 6,08 (6 analistas) e ingresos 1.178 millones (Alpha Vantage).</p>
+
+<h2>5. Tendencia a 5 años</h2>
+<div class="tw"><table>
+<tr><th>Año</th><th>Ingresos</th><th>Margen bruto</th><th>Margen operativo</th><th>FCF</th></tr>
+<tr><td>2021</td><td>1.414</td><td>14,4%</td><td>7,8%</td><td>112,3</td></tr>
+<tr><td>2022</td><td>1.769</td><td>15,5%</td><td>9,1%</td><td>158,2</td></tr>
+<tr><td>2023</td><td>1.972</td><td>17,1%</td><td>10,4%</td><td>414,2</td></tr>
+<tr><td>2024</td><td>2.116</td><td>20,1%</td><td>12,8%</td><td>416,2</td></tr>
+<tr><td>2025</td><td>2.490</td><td>23,0%</td><td>16,6%</td><td>362,7</td></tr>
+<tr><td class="n">12m a jun-26</td><td>3.438</td><td>23,8%</td><td>18,1%</td><td>482,0</td></tr>
+</table></div>
+<p>Fuente: Stock Analysis (operativo 2025 según empresa: 405,9; el agregador reclasifica a 413,5). UPA diluida: 2,15 → 3,48 → 4,44 → 8,27 → 9,38 → 13,87 (12m).</p>
+<ul>
+<li>CAGR de ingresos 2021–2025: (2.490 / 1.414)^(1/4) - 1 = 15,2%. De utilidad operativa: 39,0%.</li>
+<li>Margen bruto y operativo suben los cinco años. El FCF cae en 2025 (cuentas a cobrar por adquisiciones) y vuelve a subir en los 12 meses a junio.</li>
+<li>La UPA 2024 incluye una ganancia por venta de activos de 94,8 antes de impuestos (venta de RHB): sin ella la UPA 2024 sería ~5,97 [estimación propia].</li>
+<li><b>Bandera (c): sin bandera.</b> Reparo: la muestra no contiene un valle de ciclo, así que la prueba de pico contra pico no se puede aplicar; el riesgo de estar en un máximo de ciclo queda abierto.</li>
+</ul>
+
+<h2>6. Balance en profundidad</h2>
+<p>Cifras en millones de USD al 30-jun-2026 (10-Q), contra el 31-dic-2025.</p>
+<h3>Estructura de capital</h3>
+<div class="tw"><table>
+<tr><th>Partida</th><th>30-jun-26</th><th>31-dic-25</th><th>Lectura</th></tr>
+<tr><td>Caja</td><td>464,5</td><td>390,7</td><td>Sube por flujo operativo</td></tr>
+<tr><td>Deuda financiera</td><td>283,9 (15,1 corriente + 268,7 largo plazo)</td><td>291,0</td><td>Estable</td></tr>
+<tr><td>Caja neta</td><td>+180,6</td><td>+99,7</td><td>Sin deuda neta</td></tr>
+<tr><td>Goodwill + intangibles</td><td>616,2 + 660,0 = 1.276,2</td><td>585,2 + 554,7 = 1.139,9</td><td>40% del activo; 94% del patrimonio</td></tr>
+<tr><td>Patrimonio (Sterling)</td><td>1.357,3</td><td>1.108,5</td><td>Patrimonio tangible: 81,1</td></tr>
+</table></div>
+<p><b>Línea de crédito (comunicado del 8-jul-2026):</b> se reestructuró en una línea revolving de hasta 1.500 millones con vencimiento en julio de 2031 (antes vencía el 5-jun-2028), agente BMO; menor margen sobre SOFR según el apalancamiento neto y covenants "en general menos restrictivos". No se identificó el límite exacto de apalancamiento en las fuentes revisadas.</p>
+<h3>Liquidez</h3>
+<ul>
+<li>Razón corriente: 1.428,7 / 1.291,1 = 1,11x (1,01x a dic-25).</li>
+<li><b>Cuidado:</b> los pasivos por contratos (anticipos y facturación por adelantado) son 802,6, más que la caja (464,5). Parte de la caja la pusieron los clientes antes de que se haga la obra. Es normal en construcción y es una fortaleza comercial (los clientes financian), pero si el ritmo de nuevas obras baja, esos anticipos se consumen y la caja cae.</li>
+</ul>
+<h3>Capital de trabajo</h3>
+<ul>
+<li>Cuentas a cobrar: 770,7 (501,2 a dic-25). DSO sobre el 2T26 anualizado: 770,7 / (1.168,2 x 4) x 365 = 60,2 días. Sobre 12 meses daría más, distorsionado por las adquisiciones; el DSO de 2025 sobre ingresos anuales fue 89,2 días con cuentas a cobrar adquiridas.</li>
+<li>Cambios de orden y reclamos sin aprobar: 2,9 (inmaterial).</li>
+</ul>
+<p><b>Rentabilidad (DuPont FY2025):</b> ROE = 11,7% x 0,95 x 2,38 = 26,2%. EME: 7,5% x 1,83 x 2,53 = 34,6%. STRL gana por margen; EME por rotación. ROIC de 12 meses [cálculo propio]: NOPAT 623,5 x (1 - 0,245) = 470,7 sobre capital invertido (283,9 + 1.357,3 - 464,5 = 1.176,7) = 40,0%.</p>
+<h3>Partidas ocultas</h3>
+<ul>
+<li>Earn-outs: CEC hasta 80 millones (valor razonable inicial 39,2; pagados 7,8 en el 1S26) y Stone Ridge hasta 15 (9,7 de valor razonable).</li>
+<li>Joint ventures no consolidadas: obra pendiente de 371,9, con participación de STRL de 148,8; responsabilidad solidaria, sin situaciones conocidas que la activen (10-K).</li>
+<li>Planes de pensión multiempleador: pasivo por retiro no determinable (10-K).</li>
+<li>Litigios: rutinarios, no materiales individualmente (10-K). No se revisó el Item 3 completo.</li>
+</ul>
+
+<h2>7. Calidad de ganancias y puntajes forenses</h2>
+<ul>
+<li><b>Flujo operativo / utilidad neta:</b> 1S26: 328,0 / ~279 (UPA GAAP 3,09 + 5,00 por ~31,1 millones de acciones) ≈ 1,2x [estimación con UPA]. FY2025: 440,0 / 290,2 = 1,5x.</li>
+<li><b>Devengamientos (Sloan) FY2025:</b> (290,2 - 440,0) / 2.634 = -5,7%: negativo, favorable.</li>
+<li><b>GAAP contra ajustado:</b> guidance de UPA GAAP 17,25–17,85 contra ajustada 19,70–20,30. La diferencia (~2,45 por acción) son amortización de intangibles y costos de adquisición: crece con cada compra.</li>
+<li><b>SBC:</b> ~1% de los ingresos, cubierta por recompras.</li>
+</ul>
+<div class="tw"><table>
+<tr><th>Puntaje</th><th>STRL (FY25 vs FY24)</th><th>EME</th><th>Lectura</th></tr>
+<tr><td>Beneish M</td><td>-1,99 (ajustado por adquisiciones: -2,41)</td><td>-2,25</td><td>Entre los dos umbrales (-1,78 y -2,22) por cuentas a cobrar adquiridas; TATA negativo (favorable)</td></tr>
+<tr><td>Altman Z''</td><td>2,93</td><td>4,69</td><td>Zona segura; X1 mejora de 0,005 a 0,043 con el balance de junio</td></tr>
+<tr><td>Altman Z</td><td>8,37</td><td>7,13</td><td>Segura</td></tr>
+<tr><td>Piotroski F</td><td>5</td><td>6</td><td>Intermedio</td></tr>
+</table></div>
+<p>Cálculos del informe del 8-oct-2026 con datos FY2025. Los umbrales de Beneish tienen atribución discutida; los de Altman son los estándar, sin consulta del trabajo original.</p>
+
+<h2>8. Dilución y asignación de capital</h2>
+<div class="tw"><table>
+<tr><th>Cierre</th><th>Acciones (millones)</th><th>Variación</th></tr>
+<tr><td>2021</td><td>29,84</td><td></td></tr>
+<tr><td>2022</td><td>30,59</td><td>+2,5%</td></tr>
+<tr><td>2023</td><td>30,93</td><td>+1,1%</td></tr>
+<tr><td>2024</td><td>30,67</td><td>-0,8%</td></tr>
+<tr><td>2025</td><td>30,68</td><td>+0,0%</td></tr>
+<tr><td class="n">31-jul-2026</td><td>30,59</td><td>-0,3%</td></tr>
+</table></div>
+<p><b>Bandera (a): sin bandera.</b> Acumulado 2021–2025: +2,8% (0,7% anual), pese a pagar parte de dos adquisiciones con acciones (79 millones en CEC y 27,4 en Stone Ridge).</p>
+<ul>
+<li><b>Recompras:</b> 1S26: 69.000 acciones por 35,3 millones (promedio ~511, casi el precio de hoy). 2025: 74,2 millones según el estado de flujos de la empresa (Stock Analysis muestra 95,2: probablemente incluye acciones retenidas por impuestos). Programa de 400 millones a 24 meses desde el 12-nov-2025.</li>
+<li><b>Adquisiciones:</b> CEC Facilities Group (1-sep-2025; el 10-K informa 562 millones de precio: 443 en caja y 79 en acciones, más earn-out de hasta 80; la suma no cierra con los datos revisados y queda pendiente de verificar) y Stone Ridge (1-jun-2026; 178,0 en total: 140,0 en caja, 27,4 en acciones, 9,7 de earn-out).</li>
+<li><b>Capex:</b> 69,6 en el 1S26 (31,3 en el 1S25): más del doble, por crecimiento.</li>
+<li><b>Sin dividendos.</b></li>
+</ul>
+
+<h2>9. Deuda y prueba de estrés</h2>
+<ul>
+<li>Deuda 283,9 contra caja 464,5; cobertura FY2025 = EBIT 405,9 / intereses pagados 17,8 = 22,8x.</li>
+<li><b>Prueba de estrés [estimación propia]:</b> ingresos 2026 guiados (4.075) -30%, margen bruto vuelve a 17,1% (el de 2023) y gastos de administración de ~260 (estimado): EBIT = 2.852,5 x 0,171 - 260 = 227,8; cobertura ~13x. Además, con caída de obra los anticipos de clientes (802,6) se consumirían y la caja neta podría desaparecer, pero la línea de 1.500 sin usar cubre de sobra.</li>
+<li><b>Bandera (b): sin bandera.</b></li>
+</ul>
+
+<h2>10. Moat y competencia contra el par</h2>
+<div class="tw"><table>
+<tr><th>Fuente de moat</th><th>Evidencia</th><th>STRL</th><th>EME</th></tr>
+<tr><td>Escala en preparación de sitios grandes</td><td>Margen operativo</td><td>16,6% (FY25)</td><td>9,3%</td></tr>
+<tr><td>Relación con clientes recurrentes</td><td>Concentración en baja con backlog en suba</td><td>Top 4 de E-Infra: 40% → 27%</td><td>n/d</td></tr>
+<tr><td>Retorno sobre capital</td><td>ROIC</td><td>~30–40% según definición</td><td>~41%</td></tr>
+<tr><td>Capacidad (equipos y personal)</td><td>Cuello de botella declarado</td><td>Falta de electricistas [Reportado]</td><td>Más diversificada</td></tr>
+</table></div>
+<p><b>Conclusión: moat parcial demostrado.</b> El margen operativo casi duplica al de EME y sube cinco años seguidos; el ROIC es alto. Amenazas: que los hiperescaladores frenen capex, que entren competidores grandes a la preparación de sitios (cuando los márgenes son de 20%+, atraen competencia), y la ejecución en electricidad, de menor margen.</p>
+
+<h2>11. Ratios contra el par</h2>
+<h3>Rentabilidad y crecimiento (FY2025)</h3>
+<div class="tw"><table>
+<tr><th>Métrica</th><th>STRL</th><th>EME</th><th>Diferencia</th></tr>
+<tr><td>Crecimiento de ingresos</td><td>17,7%</td><td>16,6%</td><td>+1,1 pp</td></tr>
+<tr><td>Margen bruto</td><td>23,0%</td><td>19,3%</td><td>+3,7 pp</td></tr>
+<tr><td>Margen operativo</td><td>16,6%</td><td>9,3%</td><td>+7,3 pp</td></tr>
+<tr><td>Margen FCF</td><td>14,6%</td><td>7,0%</td><td>+7,6 pp</td></tr>
+<tr><td>ROE</td><td>26,2%</td><td>34,6%</td><td>-8,4 pp</td></tr>
+</table></div>
+<h3>Balance y valuación (precios del 9-oct-2026)</h3>
+<div class="tw"><table>
+<tr><th>Métrica</th><th>STRL</th><th>EME</th><th>Lectura</th></tr>
+<tr><td>Caja neta</td><td>+180,6</td><td>caja neta</td><td>Ambas sin deuda neta</td></tr>
+<tr><td>Razón corriente</td><td>1,11x</td><td>1,22x</td><td>EME más holgada</td></tr>
+<tr><td>P/E 12m GAAP</td><td class="n">37,0x (513 / 13,87)</td><td>n/d</td><td>Prima alta sobre utilidad pasada</td></tr>
+<tr><td>P/E 2026E</td><td class="n">25,6x (513 / 20,04)</td><td class="n">24,0x (789,45 / 32,86)</td><td>Prima de 7%</td></tr>
+<tr><td>P/E 2027E</td><td class="n">20,2x (513 / 25,41)</td><td class="n">21,5x (789,45 / 36,75)</td><td>STRL más barata, con UPA +26,8% contra +11,8%</td></tr>
+</table></div>
+<p>Estimaciones de Alpha Vantage (STRL: 7 y 8 analistas; EME: del informe del 8-oct). Diferencias: de negocio (márgenes por trabajo escaso de preparación de sitios), contable (UPA ajustada de STRL excluye amortización de compras) y de ciclo (ambas en máximo de demanda de centros de datos).</p>
+
+<h2>12. Management y gobierno</h2>
+<ul>
+<li><b>CEO:</b> Joe Cutillo. <b>CFO:</b> Nick Grindstaff.</li>
+<li><b>Insiders (Alpha Vantage, abr–sep 2026; códigos a confirmar en el Form 4):</b> ventas con precio por ~31,0 millones en seis meses: CEO 50.000 acciones a ~497,57 (23-abr), abogado general 2.500 a 888 (25-jun), CFO 556 a 682,29 (10-jul), COO 6.559 a 536,08 (6-ago). 21-sep: el CEO dispuso de 40.000 a precio 0 (probable entrega o cancelación de un premio). Ninguna compra en mercado abierto.</li>
+<li><b>Historial de promesas:</b> cumplió y superó guidance en cada trimestre de 2026; 22 trimestres seguidos de beat en UPA.</li>
+<li><b>Asignación de capital:</b> recompras a precios cercanos al actual, compras chicas y medianas pagadas mayormente en caja, sin dilución neta. Correcto.</li>
+<li><b>Cambios entre filings:</b> concentración de clientes de E-Infrastructure en baja (40% → 31% → 27%); vencimiento de deuda extendido a 2031. No se comparó el Item 1A completo entre filings ni se revisó el proxy (DEF 14A), por lo que las métricas del bono del management no están disponibles.</li>
+</ul>
+
+<h2>13. Valuación</h2>
+<div class="tw"><table>
+<tr><th>Método</th><th>Valor por acción</th><th>Comentario</th></tr>
+<tr><td>DCF base (FCF 482 TTM, WACC 10%)</td><td>435</td><td>-15% contra el precio</td></tr>
+<tr><td>DCF bear (WACC 11%, FCF cae y se estanca)</td><td>194</td><td>Fin del ciclo de centros de datos</td></tr>
+<tr><td>DCF bull (WACC 10%, FCF +30% a +4%)</td><td>592</td><td>+15%</td></tr>
+<tr><td>Múltiplo: UPA 2028E 29,22 x 20x</td><td>584</td><td>Neutral de 12 meses</td></tr>
+<tr><td>Consenso (mediana de 5 objetivos fechados)</td><td>742</td><td>+44,6%</td></tr>
+</table></div>
+<p><b>Insumos:</b> tasa del Tesoro a 10 años 5,26% (Alpha Vantage, semana al 2-oct-2026); prima de riesgo de Damodaran 4,23% (enero 2026, último dato encontrado); beta 1,86 (Stock Analysis). Ke = 5,26% + 1,86 x 4,23% = 13,1%. Con una beta tan alta (inflada por la volatilidad de 2026) el DCF da valores muy bajos, así que se usan 10% (beta de ~1,1, sectorial) y 13% como rango. FCF base: 12 meses a junio-2026 = 362,7 + (328,0 - 69,6) - (170,3 - 31,3) = 482,0.</p>
+<p><b>DCF base:</b> crecimiento del FCF 25%, 20%, 15%, 12%, 10%, 8%, 6%, 5%, 4% y 3%; g terminal 3%. EV = 13.380; equity = 13.560; por acción 435,46. El valor terminal pesa 56% del EV.</p>
+<div class="tw"><table>
+<tr><th>WACC</th><th>g 2,5%</th><th>g 3,0%</th><th>g 3,5%</th></tr>
+<tr><td>9,0%</td><td>487</td><td>512</td><td>542</td></tr>
+<tr><td>10,0%</td><td>418</td><td>435</td><td>455</td></tr>
+<tr><td>11,0%</td><td>366</td><td>378</td><td>392</td></tr>
+</table></div>
+<p><b>Reverse DCF:</b> EV implícito 15.794 (513 x 31,14 diluidas - 180,6 de caja neta).</p>
+<ul>
+<li>Con WACC 10%: el precio descuenta FCF +13,8% anual por 10 años (FCF del año 10: 1.755).</li>
+<li>Con WACC 13%: +19,9% anual (FCF del año 10: 2.968).</li>
+<li>En los últimos 5 años el FCF creció 34,1% anual (112 → 363), con el viento de cola de los centros de datos. El precio no exige repetir eso, pero sí que el ciclo dure una década.</li>
+</ul>
+<p><b>Lectura:</b> por FCF la acción no está barata (el FCF crece menos que la utilidad por el capex en suba y porque la utilidad ajustada excluye amortizaciones). Por P/E forward 2027 cotiza en línea con EME con el doble de crecimiento. La diferencia entre el DCF (435) y el consenso (742) es de 70%: el consenso proyecta múltiplos estables y UPA en suba; el DCF castiga que el FCF todavía sea 3% de la capitalización (482 / 15.692).</p>
+<div class="caja"><p class="caja-t">Veredicto QUÉ: sí</p>
+<p>Sin banderas rojas: dilución neta mínima, caja neta y mejora de cinco años. Reparos: valuación sobre FCF, ciclo de centros de datos sin valle en la muestra, goodwill e intangibles de 94% del patrimonio, mezcla de menor margen.</p></div>
+
+<p class="parte">Parte II · CUÁNDO comprar (estado del gráfico)</p>
+
+<h2>14. Indicadores</h2>
+<p>Serie diaria de 100 ruedas (19-may a 9-oct-2026) y semanal desde 2003 (Alpha Vantage).</p>
+<div class="tw"><table>
+<tr><th>Indicador</th><th>Valor</th></tr>
+<tr><td>Cierre</td><td>513,00</td></tr>
+<tr><td>Media de 50 ruedas</td><td>516,25 (precio -0,6%)</td></tr>
+<tr><td>Media de 40 semanas (~200 ruedas)</td><td>555,07 (precio -7,6%); hace 4 semanas era 534,62: todavía sube</td></tr>
+<tr><td>RSI 14 diario / semanal</td><td>49,1 / 44,6</td></tr>
+<tr><td>Retorno 1 mes / 3 meses</td><td>+5,8% / -22,3%</td></tr>
+<tr><td>Retorno 6 meses / 12 meses</td><td>+14,9% / +52,4%</td></tr>
+<tr><td>Desde el pico (993,74 de cierre, 4-jun)</td><td>-48,4%</td></tr>
+<tr><td>Desde el mínimo de la serie (456,10, 1-sep)</td><td>+12,5%</td></tr>
+<tr><td>Volatilidad anualizada</td><td>80,8%</td></tr>
+</table></div>
+
+<h2>15. Estructura y niveles</h2>
+<ul>
+<li><b>Tendencia de fondo (5 años):</b> de 23,10 (oct-2021) a 513: 22 veces, 86% anual. La media de 40 semanas sigue subiendo.</li>
+<li><b>Tendencia de mediano plazo:</b> bajista de junio a agosto (-48%), con dos ruedas de pánico (28-jul -15,2% con volumen de 2,8 millones; 4-ago -11,4% con 2,1 millones).</li>
+<li><b>Desde agosto:</b> lateral entre 456 y 611. Mínimos crecientes: 456,10 (1-sep), 459,02 (15-sep), 491,78 (30-sep). Máximo reciente: 563,69 (6-oct).</li>
+<li><b>Cierres semanales desde fines de agosto:</b> 470,5 → 486,5 → 511,0 → 518,7 → 512,3 → 533,4 → 513,0.</li>
+<li><b>Soportes:</b> 491 a 498 (mínimos de fines de septiembre) y 456 (mínimo de 52 semanas recientes). <b>Resistencias:</b> 555 a 564 (media de 40 semanas y máximo del 6-oct) y 604 a 611 (agosto).</li>
+<li><b>Historial de caídas:</b> dos caídas de ~47% en cierres semanales en 18 meses (nov-2024 a abr-2025 y jun-2026 a ago-2026). Es una acción que cae fuerte aun con resultados buenos.</li>
+</ul>
+<div class="caja"><p class="caja-t">Veredicto CUÁNDO: neutro</p>
+<p>El precio está en un rango sin tendencia clara, con mínimos levemente crecientes pero debajo de la media de 40 semanas.</p>
+<ul>
+<li><b>Pasa a favorable:</b> cierre semanal sobre 564 (recupera la media de 40 semanas) y luego sobre 611 con volumen.</li>
+<li><b>Pasa a desfavorable:</b> cierre semanal bajo 491 y, sobre todo, bajo 456.</li>
+<li><b>Evento:</b> el reporte del 3T26 (sin fecha confirmada, ~2-nov) puede mover ±10% o más (el 2T26 movió -11,4%).</li>
+</ul></div>
+
+<p class="parte">Parte III · Contexto, escenarios y cierre</p>
+
+<h2>16. Situación actual y catalizadores</h2>
+<ul>
+<li><b>[Hecho] 3-ago:</b> 2T26 récord (ingresos +90%, UPA ajustada 5,80, backlog combinado 5.620) y guidance elevada por tercera vez.</li>
+<li><b>[Hecho] 8-jul:</b> línea de crédito de 1.500 millones a 2031.</li>
+<li><b>[Hecho] 1-jun:</b> compra de Stone Ridge (Idaho) por 178 millones.</li>
+<li><b>[Reportado] 4-ago:</b> el mercado castigó la mezcla y la escasez de electricistas; según ts2.tech, el CEO dijo que con "1.000 o 2.000 electricistas más" podrían crecer más.</li>
+<li><b>[Reportado] analistas:</b> Stifel bajó su objetivo de 804 a 742 (8-oct); Cantor está en 742 (30-sep, antes 956); D.A. Davidson inició con 700 (24-ago).</li>
+</ul>
+<div class="tw"><table>
+<tr><th>Fecha</th><th>Evento</th><th>Por qué importa</th></tr>
+<tr><td class="n">~2-nov (no confirmada)</td><td>Resultados 3T26</td><td>Consenso UPA 6,08 e ingresos 1.178; backlog y margen de E-Infrastructure</td></tr>
+<tr><td class="n">Fines de oct</td><td>Resultados de Alphabet, Meta, Microsoft, Amazon</td><td>Su capex es la demanda de STRL [Hipótesis]</td></tr>
+<tr><td>2027</td><td>Earn-outs de CEC (hasta 80)</td><td>Pago en caja si se cumplen metas</td></tr>
+<tr><td>Nov-2027</td><td>Fin del programa de recompra de 400</td><td>Demanda propia de acciones</td></tr>
+<tr><td>Jul-2031</td><td>Vencimiento de la línea de crédito</td><td>Sin presión de refinanciación</td></tr>
+</table></div>
+
+<h2>17. Macro y sensibilidades</h2>
+<p>Medición del informe del 8-oct-2026 (98 ruedas, 18-may a 6-oct, Alpha Vantage):</p>
+<div class="tw"><table>
+<tr><th>Variable</th><th>Beta</th><th>Correlación</th><th>Lectura</th></tr>
+<tr><td>WTI</td><td>-0,05</td><td>-0,04</td><td>Sin relación medible</td></tr>
+<tr><td>WTI controlando por SPY</td><td>+0,18</td><td>n/d</td><td>Sin relación medible</td></tr>
+<tr><td>Tasa a 10 años</td><td>-0,17</td><td>-0,12</td><td>Débil</td></tr>
+<tr><td>SPY</td><td>3,2</td><td>n/d</td><td>Muy sensible al mercado</td></tr>
+</table></div>
+<p>El petróleo no mueve a STRL. Lo que sí la mueve es el factor "infraestructura de IA": el 28-jul cayó 15,2% con el S&amp;P 500 en +0,2%, junto con AMD, Micron y Vertiv. La tasa a 10 años en 5,26% presiona los múltiplos de crecimiento, pero en la medición diaria pesa poco. Canal teórico: el asfalto y el combustible tocan a Transportation (13% de los ingresos del 2T26).</p>
+
+<h2>18. Señales del mercado</h2>
+<div class="tw"><table>
+<tr><th>Señal</th><th>Dato</th><th>Fecha</th><th>Fuente</th><th>Lectura</th></tr>
+<tr><td>Consenso S&amp;P Global</td><td>8 analistas, "Strong Buy", promedio 836,57, mediana 754</td><td class="n">9-oct</td><td>Stock Analysis</td><td>+47% a la mediana</td></tr>
+<tr><td>Objetivos fechados</td><td>700, 742, 742, 754, 950; mediana 742; dispersión 33,7%</td><td class="n">ago–oct</td><td>Casas individuales</td><td>Tres recortes recientes</td></tr>
+<tr><td>UPA 2027</td><td>25,41 (hace 90 días: 27,43; -7,4%)</td><td class="n">10-oct</td><td>Alpha Vantage</td><td>Estimaciones en baja</td></tr>
+<tr><td>Short interest</td><td>1,20 millones de acciones (3,99% del float), 2,2 days to cover</td><td class="n">15-sep</td><td>MarketBeat (FINRA)</td><td>Bajo</td></tr>
+<tr><td>Insiders</td><td>Solo ventas en 2026 (~31 millones)</td><td class="n">abr–sep</td><td>Alpha Vantage</td><td>Señal negativa leve</td></tr>
+</table></div>
+<p>Ninguna casa con objetivo colocó emisiones de STRL en los últimos 24 meses (no hubo emisiones de acciones para caja): el consenso no tiene el conflicto que tenía ONDS.</p>
+
+<h2>19. Escenarios</h2>
+<p>Probabilidades 30/50/20: 5 puntos del optimista al pesimista desde la base 25/50/25 por la UPA 2027 en baja (-7,4% en 90 días), tres recortes de objetivos y ventas de insiders. A favor (no alcanzó para compensar): 22 beats seguidos y UPA 2026 en suba (+3,8% en 90 días).</p>
+<h3>Mediano plazo (12 meses)</h3>
+<div class="tw"><table>
+<tr><th>Escenario</th><th>Prob.</th><th>Precio</th><th>Retorno</th><th>Comentario</th></tr>
+<tr><td>Pesimista</td><td>30%</td><td>352</td><td>-31,4%</td><td>UPA 2027 baja a 22,0 x 16x: el ciclo se enfría y el múltiplo se comprime</td></tr>
+<tr><td>Neutral</td><td>50%</td><td>584</td><td>+13,8%</td><td>UPA 2028E 29,22 (25,41 x 1,15) x 20x (cerca de EME y de la mediana histórica)</td></tr>
+<tr><td>Optimista</td><td>20%</td><td>775</td><td>+51,1%</td><td>UPA 2027 en el máximo estimado (28,09) x 1,15 x 24x</td></tr>
+</table></div>
+<p>E[r] = 0,30 x (-31,4%) + 0,50 x 13,8% + 0,20 x 51,1% = <b>+7,7%</b>. Probabilidad positiva 70%. Asimetría 1,63. <b>Robustez (40/50/10): -0,5%, no se sostiene.</b></p>
+<p>Por qué el neutral no es el consenso: el DCF base (435) y el consenso con descuento (742 x 0,85 = 631) difieren 45%; se usó el método de múltiplos (584), que queda en el medio. Con el consenso como neutral el E[r] sería +12,3%. El informe del 8-oct daba +23,6% porque anclaba en el consenso y usaba 25/50/25; desde entonces Stifel recortó su objetivo y el precio bajó de 534 a 513.</p>
+<h3>Corto plazo (3 meses, con el 3T26 en el medio)</h3>
+<div class="tw"><table>
+<tr><th>Escenario</th><th>Prob.</th><th>Precio</th><th>Retorno</th><th>Comentario</th></tr>
+<tr><td>Pesimista</td><td>30%</td><td>430</td><td>-16,2%</td><td>Backlog en baja secuencial; pierde 456</td></tr>
+<tr><td>Neutral</td><td>50%</td><td>520</td><td>+1,4%</td><td>Sigue el rango 456–611</td></tr>
+<tr><td>Optimista</td><td>20%</td><td>610</td><td>+18,9%</td><td>Adjudicaciones fuertes; vuelve a 604–611</td></tr>
+</table></div>
+<p>E[r] -0,4%; robustez -3,9%. Sin ventaja.</p>
+<h3>Largo plazo (5 años, 2031)</h3>
+<div class="tw"><table>
+<tr><th>Escenario</th><th>Prob.</th><th>Precio</th><th>Retorno (anual)</th><th>Supuestos</th></tr>
+<tr><td>Pesimista</td><td>30%</td><td>400</td><td class="n">-22,0% (-4,9%)</td><td>UPA crece 3% anual desde 2027 (28,6); P/E 14x</td></tr>
+<tr><td>Neutral</td><td>50%</td><td>720</td><td class="n">+40,4% (+7,0%)</td><td>UPA +12% anual (40,0); P/E 18x</td></tr>
+<tr><td>Optimista</td><td>20%</td><td>1.265</td><td class="n">+146,6% (+19,8%)</td><td>UPA +20% anual (52,7); P/E 24x</td></tr>
+</table></div>
+<p>E[r] +42,9%; probabilidad positiva 70%; asimetría 6,65; robustez +26,0% (se sostiene).</p>
+<p><b>¿Mayoritariamente positivos?</b> Sí en la base para 12 meses y 5 años; solo el largo plazo resiste la robustez.</p>
+
+<h2>20. Bull case y bear case</h2>
+<p><b>Bull case.</b> Sterling es la pala de la fiebre de la IA: antes de que se instale un solo servidor, alguien tiene que mover la tierra, y Sterling cobra márgenes de 20%+ por hacerlo rápido. Tiene backlog firmado de 4.234 millones (casi 74% convertible en 12 meses), backlog combinado de 5.620, caja neta, una línea de 1.500 sin usar y 22 trimestres seguidos de beat. La concentración de clientes baja. A 20x la UPA 2027 cotiza como EME, que crece la mitad. La caída de 48% desde junio ya descontó un enfriamiento que todavía no aparece en los números.</p>
+<p><b>Bear case.</b> Es un contratista cíclico con márgenes en máximo histórico y un 78% de los ingresos atado a un solo tema (centros de datos y manufactura avanzada). Si los hiperescaladores frenan capex, el backlog deja de crecer, los anticipos de clientes (802,6, más que la caja) se consumen y el múltiplo se comprime a la vez. El FCF es solo 3% de la capitalización y el DCF base da 435. La UPA ajustada excluye amortizaciones de compras que crecen. Los insiders solo venden y las estimaciones de 2027 bajan.</p>
+
+<h2>21. Pre-mortem</h2>
+<p>"Octubre de 2027: la tesis falló. ¿Por qué?"</p>
+<ol>
+<li><b>Freno del capex de centros de datos</b> (más probable): uno o dos hiperescaladores recortan inversión y las adjudicaciones de STRL caen. Señal temprana: book-to-burn bajo 1,0x y backlog firmado en baja secuencial.</li>
+<li><b>Compresión de márgenes:</b> más electricidad (11% de margen) y competencia en preparación de sitios llevan el margen bruto bajo 23%. Señal: margen de E-Infrastructure bajo 22% dos trimestres.</li>
+<li><b>Problema de ejecución o integración:</b> costos excesivos en contratos de precio fijo, sobrecostos en CEC o un impairment del goodwill. Señal: reclamos y cambios de orden en suba, impairment o guidance recortada.</li>
+</ol>
+
+<h2>22. Criterios para invalidar la tesis y qué monitorear</h2>
+<div class="caja alerta"><p class="caja-t">Criterios para invalidar la tesis</p>
+<ul>
+<li>Backlog firmado en baja dos trimestres seguidos.</li>
+<li>Margen bruto consolidado bajo 24% dos trimestres seguidos (guidance 2026: ~25%).</li>
+<li>Book-to-burn bajo 1,0x dos trimestres seguidos.</li>
+<li>Recorte de la guidance de ingresos o UPA de 2026 o 2027.</li>
+<li>Deuda neta mayor a 1x el EBITDA (hoy caja neta).</li>
+<li>Cierre semanal bajo 456.</li>
+</ul>
+<p>Revisión: resultados del 3T26 (~2-nov-2026).</p></div>
+<div class="tw"><table>
+<tr><th>Métrica</th><th>Valor hoy</th><th>Umbral</th><th>Fuente</th><th>Próxima fecha</th></tr>
+<tr><td>Backlog firmado</td><td>4.233,6</td><td>baja 2 trimestres</td><td>10-Q</td><td class="n">~2-nov-2026</td></tr>
+<tr><td>Margen bruto</td><td class="n">24,8% (2T26)</td><td>24%</td><td>Comunicado</td><td class="n">~2-nov-2026</td></tr>
+<tr><td>Margen E-Infrastructure</td><td>23,3%</td><td>22%</td><td>Comunicado</td><td class="n">~2-nov-2026</td></tr>
+<tr><td>Pasivos por contratos</td><td>802,6</td><td>caída mayor a 25%</td><td>10-Q</td><td class="n">~2-nov-2026</td></tr>
+<tr><td>UPA 2027 consenso</td><td>25,41</td><td>menos de 22,77 (mínimo actual)</td><td>Alpha Vantage</td><td>mensual</td></tr>
+</table></div>
+
+<h2>23. Perfiles</h2>
+<div class="tw"><table>
+<tr><th>Perfil</th><th>Encaje</th><th>Qué tendría que creer</th><th>Riesgo</th></tr>
+<tr><td>Conservador</td><td>No</td><td></td><td>Volatilidad de 81% y dos caídas de 47% en 18 meses</td></tr>
+<tr><td>Medio</td><td>Con condiciones</td><td>Que el ciclo de centros de datos dure al menos 2 o 3 años más y el múltiplo se estabilice en ~20x</td><td>Caída de 30% si el ciclo se enfría</td></tr>
+<tr><td>Agresivo</td><td>Sí</td><td>Que la UPA crezca 15%+ anual a 5 años</td><td>Compresión de múltiplo y márgenes a la vez</td></tr>
+</table></div>
+<p>Gestión del riesgo: escalonar entradas en el tiempo (sobre todo alrededor del reporte del 3T26), definir de antemano el nivel de invalidación (456 semanal), no concentrar y respetar un horizonte de varios años.</p>
+
+<h2>24. Filtro del Viejo</h2>
+<ul class="check">
+<li>Más de un dato respalda la tesis (10-K, 10-Q, tres comunicados, consenso de dos proveedores)</li>
+<li>Contrastada con las finanzas (QUÉ: sí)</li>
+<li class="x">El momento del gráfico acompaña (CUÁNDO: neutro)</li>
+<li>Escenarios mayoritariamente positivos (en la base; a 12 meses no resiste la robustez)</li>
+<li>Sin dilución seguida</li>
+<li>Deuda manejable</li>
+<li>Mejora constante en 5 años (con reparo: sin valle en la muestra)</li>
+</ul>
+<p>Cumple 6 de 7.</p>
+
+<h2>25. Glosario breve</h2>
+<ul>
+<li><b>Backlog / RPO:</b> obra contratada y firmada pendiente de ejecutar.</li>
+<li><b>Unsigned awards:</b> obra adjudicada pero todavía sin contrato firmado.</li>
+<li><b>Book-to-burn:</b> nuevas adjudicaciones sobre ingresos del período; mayor a 1 significa que el backlog crece.</li>
+<li><b>Pasivos por contratos:</b> cobros anticipados por obra no ejecutada.</li>
+<li><b>Earn-out:</b> pago extra a los vendedores de una empresa si cumple metas.</li>
+<li><b>Mission-critical:</b> en Sterling, centros de datos, manufactura y semiconductores.</li>
+</ul>
+
+<h2>26. Fuentes</h2>
+<ol>
+<li>10-Q al 30-jun-2026: <a href="https://www.sec.gov/Archives/edgar/data/0000874238/000087423826000103/strl-20260630.htm" target="_blank" rel="noopener">sec.gov</a> (primaria)</li>
+<li>10-K 2025: <a href="https://www.sec.gov/Archives/edgar/data/874238/000087423826000024/strl-20251231.htm" target="_blank" rel="noopener">sec.gov</a> (primaria)</li>
+<li>Comunicado 4T25 y guidance inicial 2026, 25-feb-2026: <a href="https://www.sec.gov/Archives/edgar/data/874238/000087423826000018/a20260225ex991earningsrele.htm" target="_blank" rel="noopener">sec.gov</a> (primaria)</li>
+<li>Comunicado 1T26, 4-may-2026: <a href="https://www.sec.gov/Archives/edgar/data/0000874238/000087423826000052/a20260504ex991earningsrele.htm" target="_blank" rel="noopener">sec.gov</a> (primaria)</li>
+<li>Comunicado 2T26, 3-ago-2026: <a href="https://www.prnewswire.com/news-releases/sterling-reports-record-second-quarter-results-and-raises-full-year-2026-guidance-302841538.html" target="_blank" rel="noopener">prnewswire.com</a> (primaria)</li>
+<li>Línea de crédito, 8-jul-2026: <a href="https://www.strlco.com/?p=10895" target="_blank" rel="noopener">strlco.com</a> (primaria)</li>
+<li>API XBRL de la SEC, acciones en circulación: <a href="https://data.sec.gov/api/xbrl/companyconcept/CIK0000874238/dei/EntityCommonStockSharesOutstanding.json" target="_blank" rel="noopener">data.sec.gov</a> (primaria)</li>
+<li>Stock Analysis, financieros y pronóstico (consultados 10-oct-2026): <a href="https://stockanalysis.com/stocks/strl/financials/" target="_blank" rel="noopener">financieros</a>; <a href="https://stockanalysis.com/stocks/strl/forecast/" target="_blank" rel="noopener">pronóstico</a> (secundaria)</li>
+<li>MarketBeat, short interest: <a href="https://www.marketbeat.com/stocks/NASDAQ/STRL/short-interest/" target="_blank" rel="noopener">marketbeat.com</a> (secundaria)</li>
+<li>Alpha Vantage: series diaria y semanal, resultados y estimaciones trimestrales, cotización de EME y tasa a 10 años (10-oct-2026) (secundaria)</li>
+<li>Damodaran, prima de riesgo de enero 2026 (vía BVR): <a href="https://bvresources.com/articles/bvwire/damodaran-posts-his-first-data-update-for-2026" target="_blank" rel="noopener">bvresources.com</a> (secundaria)</li>
+<li>ts2.tech, reacción al 2T26: <a href="https://ts2.tech/en/sterling-infrastructure-nasdaqstrl-shares-drop-10-after-earnings-report-as-electrical-segment-alters-margins/" target="_blank" rel="noopener">ts2.tech</a> (secundaria)</li>
+<li>Informe propio del 8-oct-2026 (análisis STRL vs EME): forenses, macro, insiders y datos de EME</li>
+</ol>
+<p class="cierre">NO es recomendación de inversión.</p>
+</template>
+
+<script>
+(function(){
+  const MESES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  const fmt=f=>{const [y,m,d]=f.split("-");return `${+d}-${MESES[+m-1]}-${y}`;};
+  const ETQ={si:"Sí",no:"No",neutro:"Neutro"};
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const informes=[...document.querySelectorAll("template.informe-src")].map(t=>{
+    const d=t.dataset;
+    return {id:d.id,ticker:d.ticker,empresa:d.empresa,par:d.par||"",fecha:d.fecha,tipo:d.tipo||"",
+      que:d.que,queRazon:d.queRazon||"",cuando:d.cuando,cuandoRazon:d.cuandoRazon||"",tpl:t,
+      texto:(d.ticker+" "+d.empresa+" "+(d.par||"")+" "+t.content.textContent).toLowerCase()};
+  }).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+
+  const $=id=>document.getElementById(id);
+  const lista=$("lista"),chips=$("chips"),q=$("q"),cuenta=$("cuenta");
+  const avisoFecha=$("aviso-fecha");
+  let tickerSel="";
+
+  const veredictos=r=>`<div class="veredictos">
+    <div class="vd"><span class="tag ${r.que}">Qué: ${ETQ[r.que]||r.que}</span><p class="razon">${esc(r.queRazon)}</p></div>
+    <div class="vd"><span class="tag ${r.cuando}">Cuándo: ${ETQ[r.cuando]||r.cuando}</span><p class="razon">${esc(r.cuandoRazon)}</p></div>
+  </div>`;
+
+  function pintarChips(){
+    const tks=[...new Set(informes.map(r=>r.ticker))].sort();
+    chips.innerHTML=["",...tks].map(t=>`<button type="button" class="chip" data-t="${esc(t)}" aria-pressed="${t===tickerSel}">${t?esc(t):"Todos"}</button>`).join("");
+  }
+  chips.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;tickerSel=b.dataset.t;pintarChips();pintarLista();});
+  q.addEventListener("input",pintarLista);
+
+  function pintarLista(){
+    const term=q.value.trim().toLowerCase();
+    const vis=informes.filter(r=>(!tickerSel||r.ticker===tickerSel)&&(!term||term.split(/\s+/).every(w=>r.texto.includes(w))));
+    cuenta.textContent=`-- mostrando ${vis.length} de ${informes.length} --`;
+    $("n-inf").textContent=informes.length;
+    lista.innerHTML=vis.length?vis.map(r=>`<li><button type="button" class="card" data-id="${r.id}">
+      <div class="card-top"><span class="tk">${esc(r.ticker)}</span><span class="emp">${esc(r.empresa)}</span><span class="fecha">${fmt(r.fecha)}</span></div>
+      <div class="meta">${esc(r.tipo)}${r.par?` · par: ${esc(r.par)}`:""}</div>
+      ${veredictos(r)}</button></li>`).join("")
+      :`<li class="vacio">No hay informes que coincidan. Probá con otro ticker o borrá la búsqueda.</li>`;
+    avisoFecha.textContent=informes.length?`Datos al ${fmt(informes[0].fecha)} (informe más reciente)`:"";
+  }
+  lista.addEventListener("click",e=>{const b=e.target.closest(".card");if(b)location.hash=b.dataset.id;});
+
+  function ruta(){
+    const id=location.hash.slice(1);
+    const r=informes.find(x=>x.id===id);
+    $("vista-lista").hidden=!!r; $("vista-detalle").hidden=!r;
+    if(r){
+      $("detalle").innerHTML=`<div class="det-head">
+        <span class="marca">${esc(r.tipo)}${r.par?` · ${esc(r.ticker)} vs ${esc(r.par)}`:""}</span>
+        <span class="tk">${esc(r.ticker)}</span>
+        <div><span class="emp">${esc(r.empresa)}</span> · <span class="fecha" style="margin:0">${fmt(r.fecha)}</span></div>
+        ${veredictos(r)}</div><article class="informe"></article>`;
+      $("detalle").querySelector(".informe").appendChild(r.tpl.content.cloneNode(true));
+      avisoFecha.textContent=`Datos al ${fmt(r.fecha)}`;
+      window.scrollTo(0,0);
+    } else pintarLista();
+  }
+  $("volver").addEventListener("click",()=>{location.hash="";ruta();});
+  window.addEventListener("hashchange",ruta);
+  pintarChips(); ruta();
+})();
+</script>
+
+</body>
+</html>
