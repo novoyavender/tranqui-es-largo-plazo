@@ -77,6 +77,8 @@ h1::after{content:"_";color:var(--accent-txt);margin-left:.05em;animation:cursor
 .tag.neutro{color:var(--neutro);background:color-mix(in srgb,var(--neutro) 12%,transparent)}
 .razon{font-size:13px;color:var(--muted);margin:0}
 .razon::before{content:"// ";color:var(--accent-txt)}
+.vd-l{font-size:13px;font-weight:700;color:var(--ink)}
+.vd-l small{font-size:12px;font-weight:400;color:var(--muted)}
 .vacio{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
 
 /* Detalle */
@@ -136,8 +138,8 @@ body{min-height:calc(100vh - env(safe-area-inset-top,0px));min-height:calc(100dv
   <header class="top">
     <h1>Tranqui, <em>es largo plazo</em></h1>
     <p class="boot">
-      <span>qué comprar: lo que dice el balance</span>
-      <span>cuándo comprar: lo que dice el gráfico</span>
+      <span>qué comprar: análisis fundamental (balance y negocio)</span>
+      <span>cuándo comprar: análisis técnico (gráfico de precios)</span>
       <span>informes cargados: <b id="n-inf">0</b></span>
     </p>
   </header>
@@ -599,6 +601,7 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
   const MESES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
   const fmt=f=>{const [y,m,d]=f.split("-");return `${+d}-${MESES[+m-1]}-${y}`;};
   const ETQ={si:"Sí",no:"No",neutro:"Neutro"};
+  const ETQ_QUE={si:"Fundamentos sólidos",neutro:"Fundamentos mixtos",no:"Fundamentos débiles"};
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
   const informes=[...document.querySelectorAll("template.informe-src")].map(t=>{
@@ -614,8 +617,8 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
   let tickerSel="";
 
   const veredictos=r=>`<div class="veredictos">
-    <div class="vd"><span class="tag ${r.que}">Qué: ${ETQ[r.que]||r.que}</span><p class="razon">${esc(r.queRazon)}</p></div>
-    <div class="vd"><span class="tag ${r.cuando}">Cuándo: ${ETQ[r.cuando]||r.cuando}</span><p class="razon">${esc(r.cuandoRazon)}</p></div>
+    <div class="vd"><span class="vd-l">QUÉ comprar <small>· análisis fundamental</small></span><span class="tag ${r.que}">${ETQ_QUE[r.que]||r.que}</span><p class="razon">${esc(r.queRazon)}</p></div>
+    <div class="vd"><span class="vd-l">CUÁNDO comprar <small>· análisis técnico</small></span><span class="tag ${r.cuando}">${ETQ[r.cuando]||r.cuando}</span><p class="razon">${esc(r.cuandoRazon)}</p></div>
   </div>`;
 
   function pintarChips(){
