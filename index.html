@@ -100,6 +100,12 @@ h1::after{content:"_";color:var(--accent-txt);margin-left:.05em;animation:cursor
 .informe ul,.informe ol{padding-left:22px}
 .informe ul li::marker{content:"> ";color:var(--accent-txt)}
 .informe ol li::marker{color:var(--accent-txt)}
+.informe .parte,.informe h2{scroll-margin-top:16px}
+.informe .parte.con-volver{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px}
+.parte-t{min-width:0}
+.volver-idx{font-size:12px;font-weight:400;white-space:nowrap}
+.ir{color:var(--accent-txt);text-decoration:none;border-bottom:1px dotted var(--accent-txt)}
+.ir:hover{border-bottom-style:solid}
 .informe li{margin:4px 0}
 .ficha{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13.5px;margin:12px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
 .ficha dt{color:var(--muted);font-family:var(--f-mono);font-size:12px;padding-top:2px}
@@ -2378,6 +2384,26 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
       inf.appendChild(r.tpl.content.cloneNode(true));
       const crit=document.getElementById("criterios");
       if(crit&&r.que){const c=crit.content.cloneNode(true);const res=inf.querySelector(".caja");res?res.after(c):inf.prepend(c);}
+      // Índice interactivo: si el informe tiene un "Índice" en tabla, cada parte lleva a su sección
+      const hIdx=[...inf.querySelectorAll("h2")].find(h=>h.textContent.trim()==="Índice");
+      const tabla=hIdx&&hIdx.nextElementSibling&&hIdx.nextElementSibling.querySelector("table");
+      if(tabla){
+        const partes=[...inf.querySelectorAll(".parte")];
+        const buscar=t=>partes.find(p=>{const x=p.textContent.trim();return x===t||x.startsWith(t+". ");});
+        const suave=!matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const enlace=(el,txt)=>{const a=document.createElement("a");a.href="#";a.className="ir";a.textContent=txt;
+          a.addEventListener("click",e=>{e.preventDefault();el.scrollIntoView({behavior:suave?"smooth":"auto",block:"start"});});return a;};
+        tabla.querySelectorAll("tbody tr").forEach(tr=>{
+          const c0=tr.cells[0],c1=tr.cells[1]; if(!c1) return;
+          const destino=buscar(c0.textContent.trim());
+          if(destino){const t=c1.textContent.trim();c1.textContent="";c1.appendChild(enlace(destino,t));return;}
+          const nombres=c1.textContent.split("·").map(s=>s.trim()).filter(Boolean);
+          if(nombres.length&&nombres.every(n=>buscar(n))){c1.textContent="";nombres.forEach((n,i)=>{if(i)c1.append(" · ");c1.appendChild(enlace(buscar(n),n));});}
+        });
+        // Botón "volver al índice" en cada parte
+        partes.forEach(p=>{const t=document.createElement("span");t.className="parte-t";while(p.firstChild)t.appendChild(p.firstChild);
+          const v=enlace(hIdx,"↑ volver al índice");v.classList.add("volver-idx");p.append(t,v);p.classList.add("con-volver");});
+      }
       avisoFecha.textContent=`Datos al ${fmt(r.fecha)}`;
       window.scrollTo(0,0);
     } else pintarLista();
