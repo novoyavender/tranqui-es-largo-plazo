@@ -599,6 +599,1696 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
 <p class="cierre">NO es recomendación de inversión.</p>
 </template>
 
+<template class="informe-src"
+  data-id="btc-2026-10-24"
+  data-ticker="BTC"
+  data-empresa="Bitcoin"
+  data-fecha="2026-10-24"
+  data-tipo="Deep research educativo"
+  data-resumen="Qué problema intenta resolver, cómo funciona la red, su política monetaria, sus incentivos y las críticas que recibe. Material de fundamentos, sin precios ni veredicto.">
+<p>Este material explica Bitcoin desde el problema que intenta resolver hasta su funcionamiento actual. Está pensado para cualquier persona con curiosidad por el tema, sin necesidad de conocimientos previos de programación, criptografía o economía. Cuando aparece un concepto técnico, se explica con ejemplos y comparaciones de la vida cotidiana.</p>
+<p>Es un material educativo: no analiza precios, momentos de mercado ni recomendaciones de inversión. Los datos del protocolo corresponden al 24 de octubre de 2026 (bloque 972.826).</p>
+<h2>La tesis</h2>
+<p>La idea que recorre todo el documento es que Bitcoin podría ser el mejor activo monetario del mundo por seis propiedades:</p>
+<ol>
+<li><strong>Escasez verificable:</strong> cualquier persona puede comprobar cuántos bitcoins existen, sin confiar en nadie.</li>
+<li><strong>Descentralización:</strong> ninguna persona, empresa ni gobierno controla la red.</li>
+<li><strong>Seguridad:</strong> modificar el historial de transacciones cuesta una fortuna en energía y equipos.</li>
+<li><strong>Portabilidad:</strong> se puede enviar cualquier monto a cualquier parte del mundo en minutos.</li>
+<li><strong>Resistencia a la censura:</strong> no hace falta pedir permiso para transaccionar.</li>
+<li><strong>Sin emisor central:</strong> nadie puede decidir emitir más bitcoins.</li>
+</ol>
+<p>La tesis no se da por demostrada. A lo largo del documento se explica cómo funciona cada una de estas propiedades, en qué condiciones se cumple y qué críticas recibe.</p>
+<h2>Índice</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I</td>
+<td>El problema que Bitcoin intenta resolver</td>
+</tr>
+<tr>
+<td>II</td>
+<td>Análisis del whitepaper</td>
+</tr>
+<tr>
+<td>III</td>
+<td>Cómo funciona Bitcoin</td>
+</tr>
+<tr>
+<td>IV</td>
+<td>Criptografía, consenso, seguridad y descentralización</td>
+</tr>
+<tr>
+<td>V</td>
+<td>Política monetaria</td>
+</tr>
+<tr>
+<td>VI</td>
+<td>Bitcoin como activo monetario</td>
+</tr>
+<tr>
+<td>VII</td>
+<td>Economía e incentivos</td>
+</tr>
+<tr>
+<td>VIII</td>
+<td>Autocustodia y privacidad</td>
+</tr>
+<tr>
+<td>IX</td>
+<td>Gobernanza y poder</td>
+</tr>
+<tr>
+<td>X</td>
+<td>Bitcoin y otras criptomonedas</td>
+</tr>
+<tr>
+<td>XI</td>
+<td>Objeciones y riesgos</td>
+</tr>
+<tr>
+<td>XII</td>
+<td>Síntesis</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Glosario · Errores conceptuales frecuentes · Bibliografía y fuentes</td>
+</tr>
+</tbody>
+</table></div>
+<p class="parte">I. El problema que Bitcoin intenta resolver</p>
+<h2>1.1 Qué es el dinero</h2>
+<p>El dinero es aquello que la gente acepta de forma generalizada a cambio de bienes y servicios, y para cancelar deudas. Conviene distinguirlo de tres conceptos cercanos:</p>
+<ul>
+<li><strong>Moneda:</strong> la unidad que emite o reconoce un Estado, como el peso o el dólar.</li>
+<li><strong>Crédito:</strong> una promesa de pago futuro. Un depósito en el banco, por ejemplo, es un crédito contra el banco: el banco le debe esa plata a su cliente.</li>
+<li><strong>Activo financiero:</strong> un derecho sobre algo que genera ingresos, como una acción o un bono.</li>
+</ul>
+<p>El dinero cumple tres funciones. Es <strong>medio de intercambio</strong>, porque evita tener que encontrar a alguien que quiera exactamente lo que uno ofrece (el problema del trueque). Es <strong>unidad de cuenta</strong>, porque en él se expresan los precios. Y es <strong>reserva de valor</strong>, porque permite guardar poder de compra para usarlo más adelante.</p>
+<p>Estas funciones no son todo o nada. Una casa es buena reserva de valor pero mal medio de intercambio; una moneda con mucha inflación sirve para pagar, pero no para ahorrar. Los bienes que mejor cumplen las tres funciones son los que terminan usándose como dinero.</p>
+<h2>1.2 Breve historia del dinero</h2>
+<p>Primero se usaron bienes con valor propio: sal, ganado, metales. Después aparecieron las monedas acuñadas, garantizadas por el sello de un soberano, que muchas veces terminó reduciendo el metal de cada moneda para gastar más. Más tarde llegaron los billetes convertibles en oro, hasta que en 1971 Estados Unidos dejó de canjear dólares por oro y se impuso el dinero fiduciario: moneda de curso legal sin respaldo en ningún bien, cuyo valor depende de la disciplina de quien la emite.</p>
+<p>Hoy la mayor parte del dinero no son billetes, sino saldos en cuentas bancarias, y la mayoría de esos saldos se crean cuando los bancos otorgan préstamos. Por eso, tener plata en el banco no es tener dinero en la mano: es tener un crédito contra el banco.</p>
+<h2>1.3 El problema del doble gasto</h2>
+<p>Todo lo digital se copia gratis. Si el dinero fuera un archivo, quien lo tuviera podría enviárselo a dos personas a la vez.</p>
+<p>Supongamos que Ana tiene una "moneda digital" y se la envía a Bruno. Un segundo después, le envía exactamente el mismo archivo a Carla. Las dos copias son idénticas, y ni Bruno ni Carla pueden saber cuál de los dos pagos vale. Eso es el <strong>doble gasto</strong>.</p>
+<p>La solución tradicional es un registro central: el banco lleva la cuenta de cada saldo y rechaza el segundo pago de Ana porque ya no tiene fondos. Funciona, pero obliga a confiar en el banco.</p>
+<p>El problema de fondo no es la copia, sino el <strong>orden</strong>: acordar qué pago ocurrió primero sin que nadie lo decida. En una red abierta, donde cualquiera puede participar y algunos pueden mentir, ese acuerdo es muy difícil. Si se decidiera por votación, un tramposo podría crear miles de identidades falsas y ganar todas las votaciones.</p>
+<h2>1.4 La dependencia de intermediarios</h2>
+<p>Los pagos digitales tradicionales siempre pasan por un intermediario: un banco, una tarjeta, una billetera virtual. Eso tiene costos. Los pagos pueden revertirse, lo que obliga a los comercios a desconfiar y pedir datos a sus clientes. Las comisiones vuelven poco rentables los pagos muy chicos. Y el intermediario puede fallar, demorar, cobrar o bloquear una operación, por decisión propia o por orden de un tercero.</p>
+<p>Los intermediarios también prestan servicios útiles, como la protección contra fraudes o el crédito. Bitcoin no elimina esos servicios: elimina la <strong>necesidad</strong> de un intermediario para transferir valor. Quien quiera servicios adicionales puede contratarlos.</p>
+<h2>1.5 Intentos anteriores de dinero digital</h2>
+<p>Antes de Bitcoin hubo varios intentos de crear dinero digital. Cada uno resolvió una parte del problema:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Proyecto</th>
+<th>Año</th>
+<th>Qué aportó</th>
+<th>Qué le faltó</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DigiCash</td>
+<td>1989-1998</td>
+<td>Pagos digitales privados</td>
+<td>Dependía de una empresa, que quebró</td>
+</tr>
+<tr>
+<td>e-gold</td>
+<td>1996-2009</td>
+<td>Dinero digital respaldado en oro</td>
+<td>Era centralizado y fue cerrado por la justicia de EE.UU.</td>
+</tr>
+<tr>
+<td>Hashcash</td>
+<td>1997</td>
+<td>Un mecanismo para que enviar algo cueste esfuerzo de cómputo (la "prueba de trabajo")</td>
+<td>No era dinero</td>
+</tr>
+<tr>
+<td>b-money y bit gold</td>
+<td>1998</td>
+<td>La idea de un dinero sin emisor</td>
+<td>Nunca se implementaron</td>
+</tr>
+</tbody>
+</table></div>
+<p>A todos les faltó lo mismo: una forma de que una red abierta, sin autoridad, se pusiera de acuerdo sobre el orden de las transacciones. El whitepaper de Bitcoin cita a b-money y a Hashcash entre sus referencias.</p>
+<p>Bitcoin, además, combinó herramientas que ya existían: la criptografía de clave pública (de los años setenta), las firmas digitales, las funciones hash, las técnicas para sellar documentos en el tiempo y las redes entre pares, que permiten compartir datos sin un servidor central. Su contexto ideológico fue el de los <strong>cypherpunks</strong>, un grupo de programadores y criptógrafos que desde 1992 promovía la privacidad mediante la criptografía.</p>
+<h2>1.6 El contexto de 2008</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Evento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>18-ago-2008</td>
+<td>Se registra el dominio bitcoin.org</td>
+</tr>
+<tr>
+<td>15-sep-2008</td>
+<td>Quiebra Lehman Brothers</td>
+</tr>
+<tr>
+<td>3-oct-2008</td>
+<td>EE.UU. aprueba un rescate bancario de US$700.000 millones</td>
+</tr>
+<tr>
+<td>31-oct-2008</td>
+<td>Satoshi Nakamoto publica el whitepaper en una lista de correo de criptografía</td>
+</tr>
+<tr>
+<td>3-ene-2009</td>
+<td>Se mina el primer bloque, que incluye el titular del diario <em>The Times</em>: "Chancellor on brink of second bailout for banks"</td>
+</tr>
+<tr>
+<td>12-ene-2009</td>
+<td>Primera transacción entre personas: Satoshi le envía 10 BTC a Hal Finney</td>
+</tr>
+</tbody>
+</table></div>
+<p>El titular del primer bloque cumple dos funciones: prueba que ese bloque no se creó antes de esa fecha y deja un comentario sobre los rescates bancarios. Semanas después, Satoshi escribió: "The root problem with conventional currency is all the trust that's required to make it work". La crisis fue el contexto, pero el diseño era anterior: el dominio se registró casi un mes antes de la quiebra de Lehman Brothers.</p>
+<h2>1.7 Qué resolvió Bitcoin</h2>
+<p>El problema concreto: que dos personas puedan transferirse valor por internet, sin intermediario, sin que nadie pueda gastar dos veces lo mismo y sin tener que confiar en una autoridad que lleve el registro.</p>
+<p>La solución combina cuatro piezas, conocidas en conjunto como <strong>consenso de Nakamoto</strong>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Pieza</th>
+<th>Qué resuelve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Un registro público de todas las transacciones</td>
+<td>Cualquiera puede comprobar que una moneda no se gastó antes</td>
+</tr>
+<tr>
+<td>La prueba de trabajo para agregar bloques al registro</td>
+<td>Agregar un bloque cuesta energía, así que crear identidades falsas no da poder</td>
+</tr>
+<tr>
+<td>La regla de seguir la cadena con más trabajo acumulado</td>
+<td>Un criterio objetivo para elegir el historial válido, sin votaciones</td>
+</tr>
+<tr>
+<td>Un incentivo económico para quienes sostienen la red</td>
+<td>Cooperar resulta más rentable que atacar</td>
+</tr>
+</tbody>
+</table></div>
+<p>Bitcoin fue el primer sistema abierto, en el que cualquiera puede participar sin permiso, que logró este acuerdo y lo mantuvo funcionando desde 2009. Que vaya a reemplazar al dinero estatal, o que todos sus usuarios compartan la visión de los cypherpunks, son interpretaciones posteriores que se discuten más adelante.</p>
+<p class="parte">II. Análisis del whitepaper</p>
+<p>El documento original se llama <em>Bitcoin: A Peer-to-Peer Electronic Cash System</em> ("Bitcoin: un sistema de dinero electrónico entre pares"). Lo firmó Satoshi Nakamoto, un seudónimo cuya identidad real se desconoce, y se publicó el 31 de octubre de 2008. Tiene 9 páginas: un resumen, 12 secciones y 8 referencias. Se puede leer en <a target="_blank" rel="noopener" href="https://bitcoin.org/bitcoin.pdf">https://bitcoin.org/bitcoin.pdf</a>.</p>
+<p>A continuación se resume cada sección: qué problema plantea, qué propone y qué cambió desde entonces.</p>
+<h2>Resumen</h2>
+<p>Las firmas digitales resuelven parte del problema del dinero electrónico, pero si igual hace falta un tercero de confianza para evitar el doble gasto, se pierde la ventaja principal. La propuesta es una red entre pares que sella las transacciones en una cadena continua de prueba de trabajo, de modo que el registro no se pueda cambiar sin rehacer todo ese trabajo.</p>
+<p>La frase que resume la idea: "A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution".</p>
+<p>El sistema es seguro mientras los participantes honestos controlen, en conjunto, más poder de cómputo que cualquier grupo de atacantes. Ese supuesto sigue siendo el núcleo de la seguridad de Bitcoin. La diferencia es que hoy ese poder no viene de computadoras personales, sino de equipos diseñados solo para minar.</p>
+<h2>Sección 1 · Introducción</h2>
+<p>El comercio por internet depende de instituciones financieras que actúan como terceros de confianza. Las transacciones pueden revertirse, la mediación tiene costos que impiden los pagos chicos y los comercios tienen que desconfiar de sus clientes. Satoshi propone reemplazar la confianza por una <strong>prueba criptográfica</strong>.</p>
+<p>No plantea reemplazar al sistema bancario, sino permitir pagos electrónicos sin intermediario. Los pagos muy chicos que menciona hoy no son viables en la red principal por el costo de las comisiones; se resuelven en capas construidas encima, como Lightning (sección VIII).</p>
+<h2>Sección 2 · Transacciones</h2>
+<p>Satoshi define una moneda electrónica como una <strong>cadena de firmas digitales</strong>: cada dueño la transfiere firmando la transacción anterior junto con los datos del nuevo dueño. Funciona como un cheque endosado una y otra vez, donde cada endoso queda a la vista.</p>
+<p>La firma prueba quién autorizó el pago, pero no prueba que Ana no haya firmado antes otro pago con la misma moneda. Para saberlo hay que conocer <strong>todas</strong> las transacciones. La conclusión del paper: las transacciones tienen que anunciarse públicamente y todos deben ponerse de acuerdo sobre un único historial.</p>
+<p>Hoy el modelo es más flexible: las monedas no se transfieren enteras, sino que se combinan y se dividen (sección III), y las condiciones para gastarlas pueden ser más complejas que una sola firma.</p>
+<h2>Sección 3 · Servidor de sellos de tiempo</h2>
+<p>Para establecer el orden de las transacciones, Satoshi propone agruparlas en bloques y sellar cada bloque con un hash (su huella digital) que incluye el hash del bloque anterior. Así se forma una cadena: si alguien modifica un bloque viejo, cambia su hash, eso rompe el vínculo con el bloque siguiente y la alteración queda a la vista.</p>
+<p>Es la estructura de la cadena de bloques actual. Curiosamente, la palabra "blockchain" no aparece en el paper.</p>
+<h2>Sección 4 · Prueba de trabajo</h2>
+<p>Un sello de tiempo necesita a alguien que lo administre. Para que lo pueda hacer una red sin dueño, Satoshi propone la <strong>prueba de trabajo</strong>: para sellar un bloque hay que encontrar un número que, combinado con los datos del bloque, produzca un hash con cierta forma especial. No hay atajos: la única forma de encontrarlo es probar y probar. Encontrarlo cuesta mucho; comprobar que es correcto, un instante.</p>
+<p>Esto resuelve dos problemas. Por un lado, cambiar un bloque viejo exigiría rehacer su trabajo y el de todos los bloques posteriores. Por otro, el poder de decisión no se reparte por cantidad de identidades, sino por trabajo realizado: "one-CPU-one-vote". Crear mil cuentas falsas no sirve de nada si no se tiene poder de cómputo real.</p>
+<p>La dificultad se ajusta para que los bloques salgan a un ritmo estable. Hoy el objetivo es un bloque cada 10 minutos en promedio, con un ajuste cada 2.016 bloques (unas dos semanas). La regla actual no es seguir "la cadena más larga", como dice el paper, sino la que tiene más trabajo acumulado. Y "un procesador, un voto" ya no describe la realidad: la minería se hace con equipos especializados y se organiza en grupos llamados pools (sección VII).</p>
+<h2>Sección 5 · Red</h2>
+<p>El paper describe el funcionamiento de la red en seis pasos:</p>
+<ol>
+<li>Las transacciones nuevas se difunden a todos los participantes.</li>
+<li>Cada uno las agrupa en un bloque.</li>
+<li>Cada uno busca la prueba de trabajo de su bloque.</li>
+<li>Quien la encuentra difunde el bloque.</li>
+<li>Los demás lo aceptan solo si todas sus transacciones son válidas.</li>
+<li>Expresan su aceptación empezando a trabajar sobre el bloque siguiente.</li>
+</ol>
+<p>Si dos bloques aparecen al mismo tiempo, cada participante trabaja sobre el primero que recibió. El empate se resuelve cuando aparece el bloque siguiente: todos se pasan a la rama con más trabajo.</p>
+<p>El paper usa la palabra "nodo" tanto para quien mina como para quien verifica. Hoy son funciones distintas: la mayoría de los nodos verifican sin minar. La distinción es clave (secciones IV y IX), porque los nodos son los que rechazan un bloque inválido aunque lo produzca la mayoría de los mineros.</p>
+<h2>Sección 6 · Incentivo</h2>
+<p>¿Por qué alguien gastaría energía en sostener la red? Porque la primera transacción de cada bloque crea monedas nuevas para quien lo minó. Satoshi lo compara con los mineros de oro, que gastan recursos para sumar oro a la circulación. Además, quien mina cobra las comisiones de las transacciones que incluye.</p>
+<p>El paper anticipa que, cuando se haya emitido una "cantidad predeterminada" de monedas, el incentivo pasará a ser solo comisiones. También argumenta que a un atacante con mucho poder de cómputo le conviene más jugar limpio y minar que atacar el sistema que sostiene el valor de sus propias monedas.</p>
+<p>Tres aclaraciones actuales. El paper no menciona los 21 millones ni el calendario de reducciones de emisión: esos números están en el código (sección V). La transición a un sistema financiado solo por comisiones es la principal pregunta abierta sobre su seguridad futura (sección XI). Y el argumento del atacante supone a alguien que busca ganancias, no a alguien cuyo objetivo es destruir la red.</p>
+<h2>Sección 7 · Recuperar espacio en disco</h2>
+<p>El registro crece sin parar. Satoshi propone resumir las transacciones de cada bloque en una estructura llamada <strong>árbol de Merkle</strong>, que condensa miles de transacciones en un solo hash (sección IV). Así se pueden descartar las transacciones viejas sin romper la cadena. Según su cálculo, los encabezados de los bloques ocuparían apenas 4,2 MB por año.</p>
+<p>Esto se implementó en 2015 como "poda": un nodo verifica todo el historial y después borra los bloques viejos, conservando solo lo que necesita para seguir verificando.</p>
+<h2>Sección 8 · Verificación simplificada de pagos</h2>
+<p>No todos quieren o pueden verificar la cadena completa. Satoshi propone que un usuario guarde solo los encabezados de los bloques y pida una prueba de que su transacción está incluida. Es como verificar que una página está en un libro mirando el índice, sin leer el libro entero.</p>
+<p>El paper reconoce el límite: el método es confiable solo mientras la red esté en manos honestas. Las alertas de fraude que sugería nunca se implementaron. Las billeteras livianas usan este método, pero el propio paper recomienda que quien reciba muchos pagos verifique con un nodo propio.</p>
+<h2>Sección 9 · Combinar y dividir valor</h2>
+<p>Las transacciones pueden tener varias entradas y varias salidas. Normalmente hay una salida para el pago y otra para el vuelto, que vuelve a quien envía. Si Ana tiene 0,5 BTC y quiere pagar 0,2 BTC, usa los 0,5 enteros: 0,2 van a Bruno y el resto, menos la comisión, vuelve a Ana.</p>
+<p>Es el modelo que Bitcoin sigue usando. El vuelto es, además, una de las principales pistas que usan las empresas que rastrean pagos (sección VIII).</p>
+<h2>Sección 10 · Privacidad</h2>
+<p>Los bancos protegen la privacidad restringiendo la información. Bitcoin tiene que publicar todas las transacciones, así que la privacidad se logra manteniendo anónimas las direcciones: se ve que alguien le envía un monto a alguien, pero no quiénes son. El paper recomienda usar una dirección nueva en cada transacción y reconoce que, si se descubre quién es el dueño de una dirección, se pueden rastrear otras.</p>
+<p>La privacidad de Bitcoin es <strong>seudonimato</strong>, no anonimato. Es como firmar con un alias: nadie sabe quién está detrás hasta que alguien vincula el alias con una persona. Hoy existen empresas dedicadas a hacer exactamente eso (sección VIII).</p>
+<h2>Sección 11 · Cálculos</h2>
+<p>Satoshi calcula la probabilidad de que un atacante logre reescribir la cadena para revertir un pago. Lo plantea como una carrera: la cadena honesta y la del atacante avanzan bloque a bloque, y el atacante necesita alcanzar a la honesta.</p>
+<p>La conclusión: si el atacante tiene menos poder de cómputo que los honestos, su probabilidad de alcanzarlos cae muy rápido con cada bloque de ventaja. Con un atacante que controla el 10% de la red, alcanzan 5 confirmaciones para que su probabilidad de éxito sea menor al 0,1%. Con uno del 30%, hacen falta 24. Con uno del 45%, 340.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Poder de cómputo del atacante</th>
+<th>10%</th>
+<th>20%</th>
+<th>30%</th>
+<th>40%</th>
+<th>45%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Confirmaciones para bajar su probabilidad a menos del 0,1%</td>
+<td>5</td>
+<td>11</td>
+<td>24</td>
+<td>89</td>
+<td>340</td>
+</tr>
+</tbody>
+</table></div>
+<p>De ahí viene la costumbre de esperar 6 confirmaciones, cerca de una hora, antes de dar por firme un pago grande. En Bitcoin ninguna confirmación es absolutamente definitiva, pero cada bloque vuelve mucho más improbable una reversión.</p>
+<h2>Sección 12 · Conclusión</h2>
+<p>El paper cierra con un resumen: un sistema de transacciones que no depende de la confianza, basado en firmas digitales y en una red que registra un historial público imposible de alterar en la práctica mientras la mayoría del cómputo sea honesta. Los participantes no necesitan identificarse ni coordinarse, y pueden irse y volver cuando quieran.</p>
+<p>La última idea, que los participantes "votan" con su poder de cómputo, es la más discutida hoy. En la práctica, los cambios de reglas no se deciden solo por el poder de cómputo, sino por lo que acepten los nodos y la economía que los usa (sección IX).</p>
+<h2>Lo que el whitepaper no describe del Bitcoin actual</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tema</th>
+<th>En el paper</th>
+<th>Hoy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cantidad máxima de monedas</td>
+<td>"Cantidad predeterminada", sin número</td>
+<td>Casi 21 millones</td>
+</tr>
+<tr>
+<td>Emisión</td>
+<td>Sin calendario</td>
+<td>50 BTC por bloque al principio, reducidos a la mitad cada 210.000 bloques; 3,125 BTC desde 2024</td>
+</tr>
+<tr>
+<td>Ritmo de bloques</td>
+<td>Sin número</td>
+<td>Un bloque cada 10 minutos en promedio</td>
+</tr>
+<tr>
+<td>Tamaño de bloque</td>
+<td>Sin límite</td>
+<td>Límite agregado en 2010 y ampliado en 2017 con SegWit</td>
+</tr>
+<tr>
+<td>Comisiones</td>
+<td>Mencionadas</td>
+<td>Un mercado: los mineros priorizan las transacciones que pagan más</td>
+</tr>
+<tr>
+<td>Quién verifica y quién mina</td>
+<td>Lo mismo</td>
+<td>Funciones separadas: nodos y mineros organizados en pools</td>
+</tr>
+<tr>
+<td>Equipos de minería</td>
+<td>Computadoras comunes</td>
+<td>Equipos especializados (ASIC)</td>
+</tr>
+<tr>
+<td>Billeteras</td>
+<td>No se describen</td>
+<td>Billeteras que se recuperan con una frase de 12 o 24 palabras</td>
+</tr>
+<tr>
+<td>Cambio de reglas</td>
+<td>"Votación con poder de cómputo"</td>
+<td>Propuestas formales, revisión pública y adopción voluntaria</td>
+</tr>
+<tr>
+<td>Capas superiores</td>
+<td>No existen</td>
+<td>Lightning Network y otras</td>
+</tr>
+<tr>
+<td>Privacidad</td>
+<td>Una dirección nueva por pago</td>
+<td>Empresas de rastreo y regulación de exchanges</td>
+</tr>
+<tr>
+<td>Vocabulario</td>
+<td>Sin las palabras "blockchain" ni "UTXO"</td>
+<td>Ambas son términos estándar</td>
+</tr>
+</tbody>
+</table></div>
+<p class="parte">III. Cómo funciona Bitcoin</p>
+<p>Antes de entrar en detalle, conviene separar tres cosas que se mezclan con frecuencia. El <strong>whitepaper</strong> es el diseño original de 2008. Las <strong>reglas de consenso</strong> son las que todos los nodos aplican: si un bloque las viola, se rechaza. Y la <strong>política</strong> de cada programa decide qué transacciones reenviar o guardar mientras esperan; que una transacción no cumpla la política de un nodo no la vuelve inválida.</p>
+<h2>3.1 Claves privadas y públicas</h2>
+<p>La <strong>clave privada</strong> es un número secreto enorme, elegido al azar. La <strong>clave pública</strong> se calcula a partir de ella con una operación matemática que funciona en un solo sentido: pasar de la privada a la pública es instantáneo, pero hacer el camino inverso es, en la práctica, imposible.</p>
+<p>Una buena forma de pensarlo es un candado y su llave. La clave pública es el candado: se puede mostrar a cualquiera y sirve para comprobar que algo se cerró con la llave correcta. La clave privada es la llave: quien la tiene puede gastar los fondos, y quien la pierde los pierde para siempre.</p>
+<p>La cantidad de claves privadas posibles es del orden de un 1 seguido de 77 ceros, más que la cantidad estimada de átomos en el planeta. Adivinar una clave ajena por azar no es una amenaza realista. Los robos de claves ocurren por otros motivos: claves mal generadas, frases de respaldo filtradas o programas maliciosos.</p>
+<h2>3.2 Direcciones y condiciones de gasto</h2>
+<p>Una dirección de Bitcoin no es una cuenta bancaria: es una forma abreviada de escribir una <strong>condición para gastar</strong>. Cuando alguien envía fondos a una dirección, los deja guardados detrás de una cerradura con instrucciones, que dicen qué hay que presentar para abrirla. En el caso más común: "una firma válida de la clave privada que corresponde a esta dirección".</p>
+<p>Esas instrucciones se escriben en un lenguaje sencillo llamado <strong>Script</strong>, diseñado a propósito para ser limitado: siempre termina y su verificación es rápida.</p>
+<p>Con los años aparecieron distintos formatos de dirección, que se reconocen por cómo empiezan:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Formato</th>
+<th>Desde</th>
+<th>Empieza con</th>
+<th>Característica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Legacy (P2PKH)</td>
+<td>2009</td>
+<td><code>1</code></td>
+<td>El formato original</td>
+</tr>
+<tr>
+<td>Script (P2SH)</td>
+<td>2012</td>
+<td><code>3</code></td>
+<td>Permite condiciones más complejas, como exigir varias firmas</td>
+</tr>
+<tr>
+<td>SegWit (P2WPKH)</td>
+<td>2017</td>
+<td><code>bc1q</code></td>
+<td>Más eficiente: transacciones más baratas</td>
+</tr>
+<tr>
+<td>Taproot (P2TR)</td>
+<td>2021</td>
+<td><code>bc1p</code></td>
+<td>Más privado y flexible</td>
+</tr>
+</tbody>
+</table></div>
+<h2>3.3 Firmas digitales</h2>
+<p>Una firma digital funciona como un sello imposible de falsificar. Prueba que quien firmó tiene la clave privada, sin revelarla, y queda atada al contenido exacto de la transacción: si alguien cambiara el destino o el monto, la firma dejaría de ser válida.</p>
+<p>Bitcoin usó desde el principio un sistema de firmas llamado ECDSA. En 2021, con la actualización Taproot, incorporó las <strong>firmas Schnorr</strong>, que permiten combinar varias firmas en una sola. Gracias a eso, un pago que requiere la autorización de varias personas puede verse en la cadena igual que un pago común.</p>
+<h2>3.4 Bitcoin no tiene saldos: tiene "billetes"</h2>
+<p>Bitcoin no registra saldos como un banco. Registra <strong>salidas no gastadas</strong> (en inglés, <em>Unspent Transaction Outputs</em> o UTXO). La comparación más útil es con los billetes de una billetera física.</p>
+<p>Si alguien tiene un billete de 500 y quiere pagar 200, no puede cortar el billete: lo entrega entero y recibe 300 de vuelto. En Bitcoin pasa lo mismo. Cada UTXO es como un billete con un monto determinado; para pagar, se usan uno o varios "billetes" enteros y se recibe el vuelto en un "billete" nuevo. El saldo que muestra una billetera es la suma de todos los "billetes" que sus claves pueden gastar.</p>
+<p>Otras redes, como Ethereum, usan el modelo contrario: cada cuenta tiene un saldo que sube y baja, como en un banco. El modelo de Bitcoin facilita la verificación y la privacidad, porque permite usar una dirección nueva en cada cobro. El de cuentas simplifica la programación de contratos complejos.</p>
+<h2>3.5 Qué contiene una transacción</h2>
+<p>Una transacción tiene, en esencia, dos partes:</p>
+<ul>
+<li><strong>Entradas:</strong> qué "billetes" se gastan y la prueba de que se tiene derecho a gastarlos (la firma).</li>
+<li><strong>Salidas:</strong> a quién va cada monto y con qué cerradura queda guardado.</li>
+</ul>
+<p>La diferencia entre lo que entra y lo que sale es la <strong>comisión</strong>, que cobra el minero. La comisión no depende del monto enviado, sino del <strong>espacio</strong> que ocupa la transacción en el bloque, porque el espacio es limitado. Enviar 10 dólares o 10 millones puede costar lo mismo. Una transacción típica ocupa unos 141 "bytes virtuales"; si el mercado paga 5 satoshis por cada uno, la comisión es de 705 satoshis.</p>
+<p>La unidad mínima de Bitcoin es el <strong>satoshi</strong>: un bitcoin equivale a 100 millones de satoshis.</p>
+<h2>3.6 La sala de espera: el mempool</h2>
+<p>Cuando una transacción se envía, no entra de inmediato en un bloque. Primero espera en el <strong>mempool</strong>, una especie de sala de espera que cada nodo mantiene con las transacciones válidas que todavía no se confirmaron. No hay una sala única: cada nodo tiene la suya.</p>
+<p>Los mineros eligen de esa sala las transacciones que más pagan por espacio. Si una transacción queda trabada porque pagó poco, hay dos formas de destrabarla. Se puede reemplazar por otra igual que pague una comisión mayor (RBF, <em>replace-by-fee</em>). O se puede crear una transacción "hija" con una comisión alta que arrastre a la "madre": el minero las incluye juntas porque, en conjunto, le conviene (CPFP, <em>child pays for parent</em>).</p>
+<h2>3.7 Los nodos: auditores independientes</h2>
+<p>Un <strong>nodo completo</strong> es un programa que descarga toda la historia de Bitcoin y verifica, por su cuenta, que cada bloque y cada transacción cumplan todas las reglas. Funciona como un auditor que no le cree a nadie y revisa cada asiento del libro contable.</p>
+<p>Cualquier persona puede correr un nodo en una computadora hogareña. La historia completa ocupaba entre 700 y 750 GB en 2026, pero existe una versión "podada" que verifica todo y después borra lo viejo, y ocupa mucho menos. En febrero de 2026 había unos 25.000 nodos que aceptaban conexiones públicas, y varias veces más que no las aceptan.</p>
+<p>También existen billeteras livianas, que no verifican todas las reglas y confían en parte en otros nodos. Son más cómodas, pero menos independientes.</p>
+<h2>3.8 Los mineros: una lotería que cuesta energía</h2>
+<p>Minar suele describirse como "resolver problemas matemáticos complejos". Es más preciso pensarlo como una <strong>lotería</strong> en la que cada boleto cuesta energía.</p>
+<p>El minero hace cuatro cosas:</p>
+<ol>
+<li><strong>Arma un bloque candidato:</strong> elige transacciones de la sala de espera, normalmente las que más pagan, hasta llenar el espacio disponible.</li>
+<li><strong>Lo resume:</strong> calcula un hash que representa a todas esas transacciones y lo combina con el hash del último bloque.</li>
+<li><strong>Prueba suerte:</strong> cambia un número y calcula el hash del bloque, una y otra vez, hasta obtener uno que cumpla la condición exigida. Cada intento es un boleto de lotería.</li>
+<li><strong>Difunde el bloque:</strong> si gana, lo envía a la red. Los nodos lo revisan entero y, si cumple todas las reglas, lo agregan a la cadena.</li>
+</ol>
+<p>No hay atajos: cada intento tiene la misma probabilidad de acertar. La red completa hace unos mil trillones de intentos por segundo (un 1 seguido de 21 ceros), y aun así tarda unos 10 minutos en promedio en encontrar un bloque. Quien controla el 10% de esa potencia gana, en promedio, el 10% de los bloques.</p>
+<p>La primera transacción de cada bloque es la que crea las monedas nuevas y cobra las comisiones. Tiene tres reglas: no puede reclamar más que el premio vigente más las comisiones del bloque, debe ser única y sus monedas no pueden gastarse hasta que se agreguen 100 bloques más, por si ese bloque termina descartado.</p>
+<p>¿Para qué sirve todo ese gasto? Ata la creación de bloques a un costo real. Eso impide que alguien tome el control con identidades falsas y vuelve carísimo reescribir el pasado, porque habría que rehacer el trabajo de todos los bloques posteriores.</p>
+<h2>3.9 La cadena con más trabajo y el cemento que se seca</h2>
+<p>Los nodos siguen siempre la cadena <strong>válida</strong> que tiene más trabajo acumulado. Si aparece una rama alternativa con más trabajo, el nodo se pasa a ella. Eso se llama <strong>reorganización</strong>: los bloques de la rama abandonada se descartan y sus transacciones vuelven a la sala de espera, salvo las que ya estén en la rama nueva.</p>
+<p>Las reorganizaciones de un bloque ocurren cuando dos mineros encuentran un bloque casi al mismo tiempo, y son del orden de una cada varias semanas. Las de dos bloques son raras; la última conocida fue en marzo de 2026.</p>
+<p>Por eso se dice que la confirmación en Bitcoin es <strong>probabilística</strong>. Una buena imagen es el cemento fresco: recién colocado se puede marcar, pero cada bloque que se agrega encima lo endurece un poco más. Nunca llega a ser absolutamente imposible revertir un pago, pero después de algunos bloques se vuelve prácticamente imposible.</p>
+<h2>3.10 El recorrido completo de una transacción</h2>
+<p>Ana tiene 500.000 satoshis y quiere pagarle 200.000 a Bruno.</p>
+<ol>
+<li><strong>Arma la transacción.</strong> Su billetera usa el "billete" de 500.000 como entrada y crea dos salidas: 200.000 para Bruno y el vuelto para una dirección nueva de Ana. Con una comisión de 705 satoshis, el vuelto es de 299.295.</li>
+<li><strong>La firma.</strong> La billetera firma la transacción con la clave privada de Ana.</li>
+<li><strong>La difunde.</strong> La envía a algunos nodos, que la reenvían a otros. En segundos llega a casi toda la red.</li>
+<li><strong>Cada nodo la revisa.</strong> Comprueba que el "billete" de 500.000 exista y no se haya gastado, que la firma sea válida y que no salga más dinero del que entra. Si todo está bien, la guarda en su sala de espera.</li>
+<li><strong>Un minero la incluye.</strong> La elige porque su comisión es competitiva y, después de muchos intentos, encuentra un bloque válido.</li>
+<li><strong>Los nodos verifican el bloque.</strong> Si cumple todas las reglas, marcan el "billete" de Ana como gastado y registran los dos nuevos. <strong>Primera confirmación.</strong></li>
+<li><strong>Siguen llegando bloques.</strong> Cada uno endurece el cemento.</li>
+</ol>
+<p>¿Y si Ana intenta gastar los mismos 500.000 en un pago a Carla? Los nodos que ya conocen el primer pago rechazan el segundo, salvo que pague una comisión mayor y reemplace al primero antes de que se confirme. Lo que nunca puede pasar es que los dos pagos entren en la misma cadena válida: un bloque con ambos sería rechazado. Una vez confirmado el pago a Bruno, revertirlo exigiría reescribir la cadena, con el costo que calculó Satoshi.</p>
+<h2>3.11 Por qué los nodos rechazan monedas inválidas</h2>
+<p>Cada nodo aplica las reglas por su cuenta. Rechaza un bloque si el minero se asigna más premio del permitido, si alguna transacción gasta un "billete" inexistente o ya gastado, si alguna firma es inválida, si la prueba de trabajo no alcanza o si el bloque es demasiado grande.</p>
+<p>Un minero puede gastar millones en energía para producir un bloque, pero si en ese bloque se asigna 10 BTC en lugar de 3,125, los nodos lo descartan y el minero pierde todo lo invertido. Y si alguien altera una transacción vieja, cambia su hash, lo que rompe la cadena de hashes de todos los bloques siguientes: los nodos lo detectan al instante.</p>
+<p class="parte">IV. Criptografía, consenso, seguridad y descentralización</p>
+<h2>4.1 Qué es un hash</h2>
+<p>Una <strong>función hash</strong> es como una licuadora de datos: se le pone cualquier cosa (una palabra, un libro, un bloque entero) y devuelve una "huella digital" de tamaño fijo. Bitcoin usa una llamada SHA-256, que produce huellas de 64 caracteres.</p>
+<p>Tiene cuatro características que la vuelven útil:</p>
+<ul>
+<li><strong>Siempre da el mismo resultado</strong> para la misma entrada, así que todos los nodos calculan lo mismo.</li>
+<li><strong>No se puede volver atrás:</strong> mirando el hash, es imposible saber qué se licuó. Como no se puede reconstruir una fruta a partir del jugo.</li>
+<li><strong>No hay dos entradas con el mismo hash</strong> en la práctica, así que nadie puede cambiar una transacción por otra sin que se note.</li>
+<li><strong>Un cambio mínimo lo cambia todo.</strong> Por ejemplo:</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Entrada</th>
+<th>Hash SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Bitcoin</code></td>
+<td><code>b4056df6691f8dc72e56302ddad345d65fead3ead9299609a826e2344eb63aa4</code></td>
+</tr>
+<tr>
+<td><code>bitcoin</code></td>
+<td><code>6b88c087247aa2f07ee1c5956b8e1a9f4c7f892a70e324f1bb3d161e05ca107b</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Cambiar una sola mayúscula produce un hash completamente distinto. Por eso en la minería no hay forma de "acercarse" a un hash válido: solo queda probar.</p>
+<h2>4.2 Firmas digitales</h2>
+<p>Una firma digital prueba tres cosas: que quien firmó tiene la clave privada, que el mensaje no cambió después de firmado y que el firmante no puede negar haberlo firmado. En Bitcoin, el mensaje es la transacción. Por eso la firma vincula la autorización a ese pago exacto.</p>
+<h2>4.3 Árboles de Merkle</h2>
+<p>Un bloque puede tener miles de transacciones. Para resumirlas en un solo hash, se arman de a pares, como un torneo por eliminación: se calcula el hash de cada transacción, después el hash de cada par de hashes, y así hasta llegar a uno solo, la <strong>raíz</strong>, que se guarda en el encabezado del bloque.</p>
+<p>La ventaja es que, para probar que una transacción está en un bloque de 4.000, alcanza con mostrar 12 hashes, el camino desde esa transacción hasta la raíz, sin descargar el bloque completo.</p>
+<h2>4.4 Ponerse de acuerdo en una red abierta</h2>
+<p>El desafío es que miles de computadoras que no se conocen, sin una autoridad y con algunos participantes dispuestos a mentir, acuerden un único historial.</p>
+<p>Un sistema cerrado, como una red de bancos, conoce a sus participantes y puede votar. En un sistema abierto, votar no sirve: crear identidades es gratis, y alguien podría disfrazarse de mil votantes distintos. Ese engaño se conoce como <strong>ataque Sybil</strong>. Bitcoin lo resuelve reemplazando el voto por trabajo: producir un bloque cuesta energía, que no se puede falsificar, y verificarlo es barato.</p>
+<h2>4.5 El ataque del 51%: qué se puede y qué no</h2>
+<p>Si alguien controlara más de la mitad del hashrate de la red, ¿qué podría hacer?</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Podría</th>
+<th>No podría</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Revertir sus propios pagos recientes, reescribiendo los últimos bloques (doble gasto)</td>
+<td>Gastar fondos ajenos, porque no tiene las claves</td>
+</tr>
+<tr>
+<td>Excluir transacciones de sus bloques e ignorar los bloques de otros (censura)</td>
+<td>Crear monedas por encima del premio permitido</td>
+</tr>
+<tr>
+<td>Quedarse con todos los premios de bloque</td>
+<td>Cambiar las reglas que aplican los nodos</td>
+</tr>
+<tr>
+<td>Dañar la confianza en la red</td>
+<td>Falsificar firmas</td>
+</tr>
+</tbody>
+</table></div>
+<p>En redes chicas, el hashrate se puede alquilar y estos ataques ocurrieron (sección X). En Bitcoin, el hashrate disponible para alquilar es ínfima frente al total de la red: un atacante tendría que fabricar o comprar equipos y conseguir energía equivalente a la de varias centrales eléctricas. Además, un ataque visible destruiría el valor de los propios bitcoins del atacante.</p>
+<p>Ese último argumento supone un atacante que busca ganar plata. Un Estado podría aceptar pérdidas con tal de dañar la red. En ese caso la defensa ya no es económica, sino social: los usuarios podrían coordinarse para rechazar los bloques del atacante, con un costo alto para todos.</p>
+<h2>4.6 Censura</h2>
+<p>Los mineros, o más precisamente los pools que arman los bloques, eligen qué transacciones incluir. Un pool puede negarse a incluir una transacción, pero otro la incluirá si paga una comisión razonable. Para censurar de verdad haría falta que una mayoría coordinada rechazara además los bloques de los demás.</p>
+<h2>4.7 Mineros y nodos: dos funciones distintas</h2>
+<p>Una forma de entenderlo es pensar en un partido de fútbol. Los mineros son los jugadores: proponen jugadas. Los nodos son los árbitros, y hay miles: deciden qué jugada vale. Un jugador puede meter un gol con la mano, pero si los árbitros no lo cobran, no cuenta.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>Mineros</th>
+<th>Nodos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qué hacen</td>
+<td>Ordenan transacciones y proponen bloques</td>
+<td>Verifican cada bloque y cada transacción</td>
+</tr>
+<tr>
+<td>Qué aportan</td>
+<td>Seguridad frente a reescrituras del historial</td>
+<td>El cumplimiento de las reglas</td>
+</tr>
+<tr>
+<td>Qué no pueden hacer</td>
+<td>Imponer bloques inválidos</td>
+<td>Producir bloques sin minar</td>
+</tr>
+</tbody>
+</table></div>
+<p>Por eso los mineros no pueden imponer una emisión mayor. Si la mayoría produjera bloques con más premio del permitido, los nodos los rechazarían. Esos mineros quedarían extendiendo una cadena que los exchanges, los comercios y los usuarios no reconocen, y sus monedas no tendrían a quién venderse. Los mineros eligen cuál de los historiales válidos prevalece; no deciden qué es válido.</p>
+<h2>4.8 Fallas históricas</h2>
+<p>Bitcoin tuvo fallas graves, todas de software y ninguna de su criptografía o de su modelo de consenso:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Qué pasó</th>
+<th>Cómo se resolvió</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agosto de 2010</td>
+<td>Un error permitió crear unos 184.000 millones de bitcoins en una transacción</td>
+<td>Se corrigió el programa en horas y la cadena corregida superó a la defectuosa</td>
+</tr>
+<tr>
+<td>Marzo de 2013</td>
+<td>Dos versiones del programa interpretaron distinto un bloque grande y la cadena se dividió por unas horas</td>
+<td>Los mineros volvieron a la versión anterior</td>
+</tr>
+<tr>
+<td>Septiembre de 2018</td>
+<td>Se descubrió una falla que podía permitir crear monedas de la nada en ciertas versiones</td>
+<td>Se corrigió antes de que alguien la aprovechara</td>
+</tr>
+</tbody>
+</table></div>
+<p>Las tres se resolvieron por la coordinación entre desarrolladores, mineros y operadores de nodos. Eso muestra la capacidad de reacción del sistema y, a la vez, su dependencia de un grupo técnico capaz de reaccionar.</p>
+<h2>4.9 Otros ataques posibles</h2>
+<ul>
+<li><strong>Eclipse attack:</strong> consiste en rodear a un nodo para que solo hable con computadoras del atacante, como encerrar a alguien en una habitación donde todos le mienten sobre lo que pasa afuera. Bitcoin agregó defensas, como conectarse a más nodos y a nodos de redes distintas.</li>
+<li><strong>Selfish mining:</strong> un pool guarda en secreto los bloques que encuentra para que los demás desperdicien trabajo. En teoría podría ser rentable con menos de la mitad del hashrate, pero hasta octubre de 2026 no se observó en la red.</li>
+</ul>
+<h2>4.10 Tres tipos de seguridad</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Qué protege</th>
+<th>Cómo podría fallar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Criptográfica</strong></td>
+<td>Que nadie pueda deducir claves privadas ni falsificar firmas</td>
+<td>Computadoras cuánticas a gran escala; claves mal generadas</td>
+</tr>
+<tr>
+<td><strong>Económica</strong></td>
+<td>Que reescribir la historia cueste más de lo que se podría ganar</td>
+<td>Atacantes que no buscan ganancias; menos ingresos para los mineros en el futuro</td>
+</tr>
+<tr>
+<td><strong>Operativa</strong></td>
+<td>Que los usuarios conserven y usen bien sus claves</td>
+<td>Phishing, programas maliciosos, pérdidas, quiebras de custodios</td>
+</tr>
+</tbody>
+</table></div>
+<p>La primera nunca falló. Las pérdidas que se conocen vienen casi todas de la tercera. Que "Bitcoin nunca fue hackeado" y que "se robaron bitcoins" son afirmaciones compatibles.</p>
+<h2>4.11 Qué es la descentralización</h2>
+<p>La descentralización no se mide con un solo número: tiene varias dimensiones, y cada una tiene un grado de concentración distinto.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Dimensión</th>
+<th>Pregunta</th>
+<th>Situación en 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Verificación</td>
+<td>¿Cuántos pueden comprobar las reglas por su cuenta?</td>
+<td>Decenas de miles de nodos, con equipos hogareños</td>
+</tr>
+<tr>
+<td>Producción de bloques</td>
+<td>¿Cuántos arman los bloques?</td>
+<td>Concentrada: los tres pools más grandes produjeron cerca del 61% de los bloques en un mes de 2026, y los dos primeros, alrededor del 45%</td>
+</tr>
+<tr>
+<td>Fabricación de equipos</td>
+<td>¿Quién fabrica las máquinas de minería?</td>
+<td>Pocas empresas, con predominio de Bitmain</td>
+</tr>
+<tr>
+<td>Geografía</td>
+<td>¿Dónde se mina?</td>
+<td>Estados Unidos lidera desde que China prohibió la minería en 2021</td>
+</tr>
+<tr>
+<td>Desarrollo</td>
+<td>¿Quién escribe el programa?</td>
+<td>La mayoría de los nodos usa Bitcoin Core, aunque existen alternativas</td>
+</tr>
+<tr>
+<td>Propiedad</td>
+<td>¿Quién tiene las monedas?</td>
+<td>ETFs, empresas y gobiernos tienen una parte creciente (sección IX)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Dos matices importantes. Primero, un pool no es dueño del hashrate: los mineros que lo integran pueden cambiarse a otro en minutos, y ya lo hicieron en momentos de concentración. Segundo, existe un protocolo, Stratum V2, que permite a cada minero armar su propio bloque en lugar de recibirlo armado del pool; su adopción todavía es parcial.</p>
+<p>La propiedad más descentralizada de Bitcoin es la verificación: cualquiera puede rechazar un bloque inválido. La menos descentralizada es la producción de bloques. La seguridad del sistema depende de que la primera pueda disciplinar a la segunda.</p>
+<p class="parte">V. Política monetaria</p>
+<h2>5.1 El límite de 21 millones</h2>
+<p>No existe en el código un número 21.000.000 que limite la oferta. El límite surge del calendario de emisión. Al principio, cada bloque creaba 50 bitcoins; cada 210.000 bloques (unos cuatro años) ese premio se reduce a la mitad. Es como comer una pizza tomando siempre la mitad de lo que queda: nunca se termina, pero la suma total nunca supera la pizza entera.</p>
+<ul>
+<li>En los primeros 210.000 bloques se emitieron 10,5 millones.</li>
+<li>En los siguientes, 5,25 millones.</li>
+<li>Después, 2,625 millones, y así sucesivamente.</li>
+</ul>
+<p>La suma se acerca a 21 millones sin llegar. Como el premio se redondea en satoshis enteros, el total exacto será de 20.999.999,9769 bitcoins. El último satoshi se emitiría alrededor del año 2140.</p>
+<h2>5.2 Los halvings</h2>
+<p>Cada reducción del premio se conoce como <strong>halving</strong>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Halving</th>
+<th>Fecha</th>
+<th>Bloque</th>
+<th>Premio por bloque</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>3-ene-2009</td>
+<td>0</td>
+<td>50 BTC</td>
+</tr>
+<tr>
+<td>1.º</td>
+<td>28-nov-2012</td>
+<td>210.000</td>
+<td>25 BTC</td>
+</tr>
+<tr>
+<td>2.º</td>
+<td>9-jul-2016</td>
+<td>420.000</td>
+<td>12,5 BTC</td>
+</tr>
+<tr>
+<td>3.º</td>
+<td>11-may-2020</td>
+<td>630.000</td>
+<td>6,25 BTC</td>
+</tr>
+<tr>
+<td>4.º</td>
+<td>20-abr-2024</td>
+<td>840.000</td>
+<td>3,125 BTC</td>
+</tr>
+<tr>
+<td>5.º</td>
+<td>Estimado para abril de 2028</td>
+<td>1.050.000</td>
+<td>1,5625 BTC</td>
+</tr>
+</tbody>
+</table></div>
+<p>La fecha del próximo es aproximada, porque depende de la velocidad con que salgan los bloques.</p>
+<h2>5.3 Cuántos bitcoins hay</h2>
+<p>Hoy se emiten unos 450 bitcoins por día, alrededor de 164.000 por año. En octubre de 2026 había unos 20,1 millones en circulación, el 95,7% del total que existirá. La oferta crece a un ritmo del 0,8% anual, que bajará al 0,4% después de 2028.</p>
+<p>Esa cifra sobrestima lo que realmente se puede usar. Los 50 bitcoins del primer bloque no se pueden gastar, otros 100 se perdieron por un error de 2010 y algunos mineros reclamaron menos premio del que les correspondía. La cifra exacta la puede consultar cualquier persona en su propio nodo.</p>
+<h2>5.4 Monedas perdidas</h2>
+<p>Una parte de los bitcoins está perdida para siempre: claves olvidadas, discos tirados a la basura, dueños que murieron sin dejar acceso. Nadie sabe la cantidad exacta, porque es imposible distinguir una moneda perdida de una que simplemente no se mueve. Las estimaciones van de 1,6 a 3,8 millones de bitcoins.</p>
+<p>A eso se suman cerca de 1,1 millones que, según un análisis estadístico de los primeros bloques, habría minado Satoshi Nakamoto. Nunca se movieron.</p>
+<p>Si las estimaciones son correctas, los bitcoins efectivamente disponibles estarían entre 16,3 y 18,5 millones. Una moneda perdida no se recupera ni se reemplaza.</p>
+<h2>5.5 Escasez programada y escasez económica</h2>
+<p>Que la cantidad de bitcoins esté limitada por reglas es un hecho verificable: es una <strong>escasez programada</strong>. Pero algo solo es escaso, en sentido económico, si hay demanda que supere a la oferta. Un bien limitado que nadie quiere no es escaso: simplemente es poco.</p>
+<p>La oferta fija tiene una consecuencia directa: cuando cambia la demanda, no se ajusta la cantidad emitida, sino el precio. Eso explica parte de la volatilidad de Bitcoin.</p>
+<h2>5.6 Cómo se verifica y qué implicaría cambiarlo</h2>
+<p>Cada nodo comprueba, en cada bloque, que el minero no se haya asignado más premio del permitido. Cualquiera puede consultar en su nodo cuántos bitcoins existen y compararlo con el calendario. Por eso la política monetaria de Bitcoin es auditable en tiempo real, algo que no pasa con el oro, cuya cantidad solo se estima, ni con las monedas de los bancos centrales, cuya emisión informa el propio emisor.</p>
+<p>Aumentar la emisión exigiría cambiar las reglas de forma incompatible con las actuales. Para que ese cambio prevaleciera, la gran mayoría de los nodos, exchanges, custodios y usuarios tendría que adoptarlo. Quien no lo adoptara seguiría en la cadena original, con la emisión original.</p>
+<p>El límite no es una ley física: es una regla que la comunidad podría cambiar. Su estabilidad se apoya en tres cosas. Cada tenedor tiene un incentivo a rechazar que se diluyan sus propias monedas. El límite es la característica más conocida de Bitcoin, un punto de acuerdo que casi nadie discute. Y no existe una autoridad que pueda imponer el cambio. Hubo propuestas de mantener una emisión mínima para siempre, como hace la criptomoneda Monero, pero ninguna tuvo apoyo relevante.</p>
+<h2>5.7 Quién paga la seguridad</h2>
+<p>El <strong>presupuesto de seguridad</strong> es lo que la red le paga a los mineros: el premio por bloque más las comisiones. Ese pago sostiene el hashrate, y el hashrate es lo que vuelve caro atacar la red.</p>
+<p>Hoy casi todo ese pago viene del premio. En los 90 días hasta el 4 de octubre de 2026, las comisiones fueron apenas el 0,67% de los ingresos de los mineros. Y el premio se reduce a la mitad cada cuatro años:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Período</th>
+<th>Premio por bloque</th>
+<th>Bitcoins por año (aprox.)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2024-2028</td>
+<td>3,125</td>
+<td>164.000</td>
+</tr>
+<tr>
+<td>2028-2032</td>
+<td>1,5625</td>
+<td>82.000</td>
+</tr>
+<tr>
+<td>2032-2036</td>
+<td>0,78125</td>
+<td>41.000</td>
+</tr>
+<tr>
+<td>2036-2040</td>
+<td>0,390625</td>
+<td>20.500</td>
+</tr>
+</tbody>
+</table></div>
+<p>Algunos estudios académicos advierten que, si las comisiones no reemplazan al premio, la seguridad podría debilitarse, y que un sistema que vive solo de comisiones podría volverse inestable. Los defensores responden que la demanda de espacio en los bloques crecerá con el uso, y que el valor de cada bitcoin puede compensar en parte la caída del premio. Ninguna de las dos posturas está demostrada. Es la principal pregunta abierta sobre el futuro de la red (sección XI).</p>
+<p class="parte">VI. Bitcoin como activo monetario</p>
+<h2>6.1 Propiedades monetarias</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Qué significa</th>
+<th>En Bitcoin</th>
+<th>Límite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Escasez</td>
+<td>Oferta limitada</td>
+<td>Máximo de 21 millones, verificable por cualquiera</td>
+<td>Depende de que la regla se mantenga</td>
+</tr>
+<tr>
+<td>Durabilidad</td>
+<td>No se deteriora</td>
+<td>Un registro digital no se gasta</td>
+<td>Depende de que la red funcione y de que el dueño conserve sus claves</td>
+</tr>
+<tr>
+<td>Divisibilidad</td>
+<td>Se puede fraccionar</td>
+<td>100 millones de satoshis por bitcoin</td>
+<td>Los montos muy chicos pueden costar más en comisiones de lo que valen</td>
+</tr>
+<tr>
+<td>Portabilidad</td>
+<td>Se transporta fácil</td>
+<td>Cualquier monto, a cualquier lugar, en minutos; una frase de 12 palabras puede cruzar una frontera en la memoria</td>
+<td>Requiere algún acceso a la red</td>
+</tr>
+<tr>
+<td>Fungibilidad</td>
+<td>Cada unidad vale lo mismo que otra</td>
+<td>Las unidades son técnicamente idénticas</td>
+<td>Como el historial es público, una moneda vinculada a un delito puede ser rechazada</td>
+</tr>
+<tr>
+<td>Verificabilidad</td>
+<td>Se puede comprobar que es auténtico</td>
+<td>Cualquier nodo lo verifica sin terceros</td>
+<td>Hay que correr el programa o confiar en quien lo corre</td>
+</tr>
+<tr>
+<td>Resistencia a la censura</td>
+<td>Nadie puede impedir una transacción</td>
+<td>No se necesita permiso para transaccionar</td>
+<td>Los exchanges regulados sí pueden bloquear</td>
+</tr>
+</tbody>
+</table></div>
+<h2>6.2 Funciones del dinero</h2>
+<p>Hoy Bitcoin se usa sobre todo como <strong>reserva de valor</strong>, aunque su volatilidad lo vuelve una reserva de largo plazo, no de corto. Como <strong>medio de intercambio</strong> tiene un uso minoritario: las comisiones de la red principal varían y las capas como Lightning todavía son poco usadas. El Salvador lo declaró moneda de curso legal en 2021, pero el uso en pagos cotidianos fue bajo, y en enero de 2025 una reforma volvió voluntaria su aceptación. Como <strong>unidad de cuenta</strong> es casi inexistente: muy pocos precios se expresan en bitcoins.</p>
+<p>Históricamente, los bienes que se convirtieron en dinero siguieron un camino: primero se atesoraron, después se usaron como reserva de valor, más tarde como medio de pago y al final como unidad de cuenta. Los defensores ubican a Bitcoin en la segunda etapa. Los críticos señalan que esa secuencia es una reconstrucción teórica y que nada garantiza que se complete.</p>
+<h2>6.3 Comparación con otros activos</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Criterio</th>
+<th>Bitcoin</th>
+<th>Oro</th>
+<th>Moneda estatal</th>
+<th>Depósito bancario</th>
+<th>Acción o bono</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oferta</td>
+<td>Fija y programada</td>
+<td>Crece cerca del 1,7% anual por la minería</td>
+<td>La decide el emisor</td>
+<td>Crece con los préstamos bancarios</td>
+<td>La decide el emisor</td>
+</tr>
+<tr>
+<td>Se puede verificar la oferta</td>
+<td>Sí, exactamente</td>
+<td>Solo se estima</td>
+<td>Lo informa el emisor</td>
+<td>No aplica</td>
+<td>Lo informa el emisor</td>
+</tr>
+<tr>
+<td>Depende de un tercero</td>
+<td>No, con autocustodia</td>
+<td>No, en tenencia física</td>
+<td>Del emisor</td>
+<td>Del banco</td>
+<td>Del emisor</td>
+</tr>
+<tr>
+<td>Genera ingresos</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Intereses</td>
+<td>Dividendos o cupones</td>
+</tr>
+<tr>
+<td>Portabilidad</td>
+<td>Muy alta</td>
+<td>Baja</td>
+<td>Alta en formato digital</td>
+<td>Alta, con intermediario</td>
+<td>Alta, con intermediario</td>
+</tr>
+<tr>
+<td>Facilidad para confiscarlo</td>
+<td>Difícil con autocustodia; fácil en exchanges</td>
+<td>Fácil en tenencia física</td>
+<td>Fácil en formato digital</td>
+<td>Fácil</td>
+<td>Fácil</td>
+</tr>
+<tr>
+<td>Volatilidad</td>
+<td>Muy alta</td>
+<td>Moderada</td>
+<td>Baja en monedas estables, alta en monedas con inflación</td>
+<td>La de su moneda</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td>Historia</td>
+<td>Desde 2009</td>
+<td>Milenios</td>
+<td>Siglos</td>
+<td>Siglos</td>
+<td>Siglos</td>
+</tr>
+</tbody>
+</table></div>
+<p>Una forma de medir la escasez es comparar lo que existe con lo que se produce por año. Con la producción minera de 2024, se tardarían unos 59 años en producir todo el oro que existe sobre la superficie. Con la emisión actual de Bitcoin, se tardarían unos 122 años en emitir todos los bitcoins que ya circulan. Desde 2024, Bitcoin es más escaso que el oro según esta medida. La medida describe la escasez, pero no predice el valor: la escasez sola no genera demanda.</p>
+<p class="parte">VII. Economía e incentivos</p>
+<h2>7.1 El círculo de incentivos</h2>
+<p>Bitcoin funciona como un círculo que se retroalimenta:</p>
+<ol>
+<li>Los usuarios pagan <strong>comisiones</strong> para que sus transacciones entren en bloques de espacio limitado.</li>
+<li>Los mineros cobran <strong>premio más comisiones</strong> cuando producen un bloque válido.</li>
+<li>Ese ingreso atrae equipos y energía: sube el <strong>hashrate</strong> de la red.</li>
+<li>El protocolo ajusta la <strong>dificultad</strong> para mantener un bloque cada 10 minutos.</li>
+<li>Más hashrate significa que reescribir la cadena cuesta más: más <strong>seguridad</strong>.</li>
+<li>Si la seguridad y la utilidad sostienen la <strong>demanda</strong>, el círculo continúa.</li>
+</ol>
+<h2>7.2 El ajuste de dificultad: un termostato</h2>
+<p>La dificultad funciona como un termostato. Cada 2.016 bloques, la red mira cuánto tardaron en producirse. Si tardaron menos de dos semanas, porque entraron más mineros, sube la dificultad. Si tardaron más, la baja. Por ejemplo, si 2.016 bloques salieron en 13 días en lugar de 14, la dificultad sube cerca de un 7,7%.</p>
+<p>El ajuste tiene un tope para evitar saltos extremos. El último registrado subió la dificultad un 5,9%, hasta un récord, el 16 de octubre de 2026.</p>
+<h2>7.3 Hashrate, dificultad y seguridad: tres cosas distintas</h2>
+<p>El <strong>hashrate</strong> mide cuántos intentos por segundo hace toda la red. En octubre de 2026 rondaba los 1.000 exahashes por segundo: un 1 seguido de 21 ceros. La <strong>dificultad</strong> mide cuán difícil es encontrar un bloque y se ajusta al hashrate. La <strong>seguridad</strong> es el costo de reescribir el historial, y depende del hashrate, de lo que cuesta conseguirla y de cuán repartida está. Mucho hashrate no garantiza seguridad si está concentrada en pocas manos o si se puede alquilar.</p>
+<h2>7.4 Costos de la minería y efecto de los halvings</h2>
+<p>Minar requiere equipos especializados, energía, instalaciones y personal. La electricidad representa más del 80% de los gastos operativos. Las empresas grandes tienen ventajas: consiguen energía más barata con contratos de largo plazo, acceden antes a los equipos nuevos y se financian mejor.</p>
+<p>Cuando llega un halving, el premio en bitcoins se reduce a la mitad de un día para el otro. Los mineros menos eficientes dejan de ser rentables y apagan sus equipos. La dificultad baja, y los que quedan recuperan parte de su margen. La red sigue produciendo bloques.</p>
+<h2>7.5 Dónde se mina y cuánta energía usa</h2>
+<p>Desde que China prohibió la minería en 2021, Estados Unidos pasó a ser el principal país minero. Según un informe de la Universidad de Cambridge de 2025, la red consume unos 138 TWh por año, cerca del 0,5% de la electricidad mundial. El 52,4% de esa energía proviene de fuentes sostenibles (renovables y nuclear), el 38,2% de gas natural y el 8,9% de carbón. En 2022, la parte sostenible era del 37,6%. Los datos surgen de una encuesta a las propias empresas mineras.</p>
+<h2>7.6 Por qué el costo de minar no determina el valor</h2>
+<p>La intuición dice que Bitcoin vale lo que cuesta producirlo. Pero la relación funciona al revés:</p>
+<ol>
+<li>Si el premio vale más, minar se vuelve más rentable.</li>
+<li>Entran nuevos mineros y sube el hashrate de la red.</li>
+<li>Sube la dificultad, y producir un bitcoin cuesta más, hasta acercarse a lo que se gana.</li>
+</ol>
+<p>El costo <strong>sigue</strong> al valor; no lo fija. Es lo mismo que pasa con cualquier bien: a la larga, los costos se ajustan a los precios, pero el valor surge de la demanda.</p>
+<h2>7.7 De dónde viene el valor</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Explicación</th>
+<th>Qué sostiene</th>
+<th>Qué le objetan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Valor monetario</td>
+<td>Vale porque se usa como reserva de valor: es la demanda de un activo escaso y neutral</td>
+<td>Es circular: vale porque otros creen que vale</td>
+</tr>
+<tr>
+<td>Origen por uso</td>
+<td>Los primeros usos e intercambios, como la compra de dos pizzas por 10.000 bitcoins en mayo de 2010, le dieron un primer valor</td>
+<td>No tuvo un uso previo distinto del monetario</td>
+</tr>
+<tr>
+<td>Efecto de red</td>
+<td>Vale más cuantos más usuarios tiene</td>
+<td>La relación medida es débil y no prueba causa</td>
+</tr>
+<tr>
+<td>Sin valor fundamental</td>
+<td>Para bancos centrales y economistas críticos, no genera ingresos ni tiene uso productivo, así que su precio es especulativo</td>
+<td>El mismo criterio dejaría sin valor al oro</td>
+</tr>
+<tr>
+<td>Burbuja</td>
+<td>El precio refleja expectativas de reventa</td>
+<td>Una burbuja que se mantiene 17 años, con caídas de más del 70% y recuperaciones, necesita otra explicación</td>
+</tr>
+</tbody>
+</table></div>
+<p>Conviene distinguir tres cosas: el <strong>valor</strong>, que es lo que justifica usar el activo; el <strong>precio</strong>, que es lo que se paga hoy y queda fuera de este material; y las <strong>expectativas</strong>, que son lo que el mercado cree que pasará con la adopción, la regulación y la seguridad.</p>
+<p class="parte">VIII. Autocustodia y privacidad</p>
+<p>Esta sección describe cómo funciona cada forma de custodia y qué riesgos tiene. No es un consejo sobre cómo guardar fondos propios.</p>
+<h2>8.1 Tener las claves o tener una promesa</h2>
+<p>Hay dos formas de tener bitcoins. Con <strong>autocustodia</strong>, uno tiene las claves que permiten gastar las monedas: nadie más puede moverlas, pero si las pierde no hay a quién reclamarle. Con <strong>custodia de terceros</strong> (un exchange, un ETF, un banco), uno tiene una promesa: la empresa le debe esos bitcoins. Puede recuperar el acceso si olvida su contraseña, pero depende de que la empresa no quiebre, no la hackeen, no cometa fraude ni le congele la cuenta.</p>
+<p>Tres casos conocidos lo muestran. En 2014 quebró Mt. Gox, que llegó a ser el principal exchange del mundo, con unos 850.000 bitcoins de clientes reportados como perdidos; los clientes esperaron una década para cobrar una parte. En 2022 quebró FTX, que había usado los fondos de sus clientes. Y en 2013 James Howells tiró a la basura un disco duro con unos 8.000 bitcoins, que terminó en un relleno sanitario de Gales; los tribunales rechazaron su pedido para buscarlo. Los dos primeros son fallas de custodios; el tercero, de autocustodia.</p>
+<h2>8.2 La frase semilla: la llave maestra</h2>
+<p>Las billeteras modernas generan todas sus claves a partir de una <strong>frase semilla</strong> de 12 o 24 palabras comunes, elegidas de una lista estándar. Esas palabras son como una llave maestra capaz de fabricar todas las demás llaves. Con ellas se puede reconstruir la billetera completa en cualquier programa compatible.</p>
+<p>Se le puede agregar una <strong>passphrase</strong> (una contraseña adicional): quien tenga solo las palabras no accede a los fondos protegidos por esa passphrase. La consecuencia práctica es simple: quien tiene las palabras controla los fondos, y quien las pierde, los pierde.</p>
+<h2>8.3 Formas de custodia</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Cómo funciona</th>
+<th>Protege contra</th>
+<th>Riesgos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hot wallet</td>
+<td>Las claves están en un teléfono o computadora conectados a internet</td>
+<td>Perder un respaldo físico</td>
+<td>Virus, robo del dispositivo, engaños</td>
+</tr>
+<tr>
+<td>Hardware wallet (billetera fría)</td>
+<td>Un dispositivo dedicado que firma sin exponer las claves a internet, como una caja fuerte de bolsillo</td>
+<td>Virus en la computadora</td>
+<td>Perder el respaldo; dispositivos adulterados</td>
+</tr>
+<tr>
+<td>Multisig</td>
+<td>Se necesitan, por ejemplo, 2 de 3 llaves para gastar, como una caja de seguridad que solo se abre con dos llaves de tres</td>
+<td>Que el robo o la pérdida de una sola llave arruine todo</td>
+<td>Más complejidad: hay que respaldar la configuración completa</td>
+</tr>
+<tr>
+<td>Timelocks</td>
+<td>Condiciones que se habilitan después de una fecha, como una caja con temporizador</td>
+<td>Muerte o incapacidad del titular, combinados con multisig</td>
+<td>Errores de diseño difíciles de corregir</td>
+</tr>
+</tbody>
+</table></div>
+<p>Con multisig y timelocks se puede armar una herencia, por ejemplo: "dos de tres llaves, o la llave del heredero si los fondos no se mueven durante un año". El riesgo es que el heredero no sepa usarla.</p>
+<p>Los riesgos más frecuentes son los engaños para obtener la frase semilla (ninguna billetera legítima la pide), los programas que cambian la dirección copiada por otra, los dispositivos adulterados antes de llegar al comprador (en octubre de 2026 se detectaron billeteras de hardware vendidas por un revendedor no autorizado con un chip que leía la frase semilla), los robos con violencia contra tenedores conocidos y la pérdida de respaldos.</p>
+<h2>8.4 Irreversibilidad</h2>
+<p>Una transacción confirmada no se puede revertir: no hay contracargo ni autoridad que la anule. Un error de dirección o un robo no tienen solución técnica. La única excepción es que quien recibió los fondos decida devolverlos.</p>
+<p>La irreversibilidad es, al mismo tiempo, lo que permite pagar sin intermediarios y lo que vuelve tan caros los errores. Es la misma moneda vista desde los dos lados.</p>
+<h2>8.5 Privacidad: el océano y los puertos</h2>
+<p>Una buena forma de entender la privacidad en Bitcoin es imaginar un océano y sus puertos.</p>
+<p><strong>El océano es la blockchain:</strong> la red donde circulan los bitcoins de una dirección a otra. En el océano nadie pide documentos para navegar: cualquiera puede enviar y recibir valor sin pedir permiso, a cualquier hora y a cualquier lugar del mundo.</p>
+<p><strong>Los puertos son los exchanges</strong> y las empresas reguladas donde se cambian bitcoins por pesos, dólares u otras monedas. Ahí sí se pide identificación y se aplican controles contra el lavado de dinero. La regulación actúa en los puertos, no en el océano.</p>
+<p>La metáfora explica bien tres cosas: que en la cadena no hay nombres, solo direcciones y montos; que no hace falta permiso de nadie para transaccionar; y que los controles recaen sobre los intermediarios, no sobre el protocolo.</p>
+<p>Pero tiene un límite importante: <strong>el océano es de vidrio</strong>. Cada transacción queda registrada para siempre y cualquiera puede verla. No es un océano oscuro donde nadie sabe qué pasa: es transparente, y las rutas se pueden reconstruir. Existen empresas dedicadas a seguir esas rutas hasta los puertos. Si un puerto sabe quién entró al océano, puede deducir buena parte de su recorrido.</p>
+<p>Por eso la privacidad de Bitcoin se describe como <strong>seudonimato</strong>, no anonimato: la identidad está oculta detrás de direcciones, pero se revela si alguien vincula una dirección con una persona.</p>
+<p>Esas empresas usan pistas como estas:</p>
+<ul>
+<li>Si una transacción gasta varios "billetes" a la vez, probablemente todos tienen el mismo dueño.</li>
+<li>La salida con un monto poco redondo suele ser el vuelto, y por lo tanto vuelve al mismo dueño.</li>
+<li>Usar varias veces la misma dirección vincula todos esos pagos.</li>
+<li>Los registros de los exchanges y las direcciones publicadas en internet permiten ponerles nombre.</li>
+</ul>
+<p>También hay herramientas para mejorar la privacidad:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Qué hace</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dirección nueva en cada cobro</td>
+<td>Evita que se vinculen los pagos</td>
+<td>Estándar en las billeteras actuales</td>
+</tr>
+<tr>
+<td>Nodo propio</td>
+<td>Evita revelarle a terceros qué direcciones se consultan</td>
+<td>Disponible</td>
+</tr>
+<tr>
+<td>CoinJoin</td>
+<td>Varias personas combinan sus pagos en una sola transacción, lo que confunde las pistas</td>
+<td>Disponible; varios servicios cerraron por presión legal</td>
+</tr>
+<tr>
+<td>PayJoin</td>
+<td>Quien cobra aporta un "billete" al pago, lo que rompe la pista de que todas las entradas son del mismo dueño</td>
+<td>Disponible en algunas billeteras</td>
+</tr>
+<tr>
+<td>Silent payments</td>
+<td>Permiten publicar una dirección fija sin que los cobros queden vinculados</td>
+<td>En incorporación</td>
+</tr>
+<tr>
+<td>Taproot</td>
+<td>Hace que pagos complejos parezcan pagos comunes</td>
+<td>Activo desde 2021</td>
+</tr>
+<tr>
+<td>Lightning</td>
+<td>Los pagos dentro de sus canales no se publican en la cadena</td>
+<td>Disponible, con sus propias filtraciones de información</td>
+</tr>
+</tbody>
+</table></div>
+<p>Las herramientas de privacidad también tienen riesgos legales. Los creadores de Samourai Wallet, un servicio de CoinJoin, fueron condenados en noviembre de 2025 a 5 y 4 años de prisión por operar sin licencia como transmisores de dinero.</p>
+<h2>8.6 Herramientas disponibles, propuestas y experimentos</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Estado en octubre de 2026</th>
+<th>Para qué sirve</th>
+<th>Qué se resigna</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SegWit (2017)</td>
+<td>Activa</td>
+<td>Transacciones más baratas y más capacidad</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Taproot (2021)</td>
+<td>Activa</td>
+<td>Más privacidad y eficiencia</td>
+<td>Sus direcciones dejan expuesta la clave pública, algo relevante frente a la computación cuántica</td>
+</tr>
+<tr>
+<td>Lightning Network</td>
+<td>Disponible</td>
+<td>Pagos instantáneos y baratos fuera de la cadena principal, como una cuenta corriente entre dos partes que se salda en la cadena al final</td>
+<td>Hay que gestionar la liquidez de los canales y estar conectado; muchas billeteras son custodiadas</td>
+</tr>
+<tr>
+<td>Sidechains federadas (Liquid)</td>
+<td>Disponibles</td>
+<td>Transacciones más rápidas y confidenciales</td>
+<td>Dependen de un grupo de custodios; en septiembre de 2026 una falla permitió retirar unos 4.000 bitcoins de Liquid, de los que se devolvieron unos 3.400</td>
+</tr>
+<tr>
+<td>Silent payments</td>
+<td>En incorporación</td>
+<td>Privacidad al cobrar</td>
+<td>Las billeteras tienen que trabajar más para detectar los pagos</td>
+</tr>
+<tr>
+<td>Covenants (CTV, OP_CAT)</td>
+<td>Propuestas, no activadas</td>
+<td>Restringir cómo se pueden gastar los fondos: bóvedas, mejores capas superiores</td>
+<td>Debate sobre riesgos y prioridades</td>
+</tr>
+<tr>
+<td>Ark y otras capas</td>
+<td>Experimentales</td>
+<td>Pagos fuera de la cadena con salida garantizada</td>
+<td>Dependen de operadores</td>
+</tr>
+<tr>
+<td>BIP-360</td>
+<td>Borrador</td>
+<td>Proteger las direcciones frente a ataques cuánticos</td>
+<td>Todavía no define cómo firmar ni cómo migrar las monedas existentes</td>
+</tr>
+</tbody>
+</table></div>
+<p>En 2026, Lightning tenía entre 13.000 y 17.000 nodos con canales públicos, según quién lo midiera.</p>
+<p>Las capas superiores ganan velocidad y comodidad, pero muchas veces reintroducen intermediarios: billeteras custodiadas, federaciones, operadores. La posibilidad de usar Bitcoin sin pedir permiso se conserva plenamente solo para quien usa la red principal de forma directa.</p>
+<p class="parte">IX. Gobernanza y poder</p>
+<h2>9.1 Quién tiene poder en Bitcoin</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Actor</th>
+<th>Qué puede hacer</th>
+<th>Qué no puede hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Desarrolladores</td>
+<td>Proponer cambios, escribir y revisar código</td>
+<td>Obligar a nadie a usar su programa</td>
+</tr>
+<tr>
+<td>Mantenedores de Bitcoin Core</td>
+<td>Aprobar cambios en el programa más usado</td>
+<td>Cambiar las reglas de quienes no actualicen</td>
+</tr>
+<tr>
+<td>Operadores de nodos</td>
+<td>Elegir qué programa y qué reglas aplicar</td>
+<td>Producir bloques</td>
+</tr>
+<tr>
+<td>Mineros y pools</td>
+<td>Ordenar transacciones, señalar apoyo a cambios, censurar en sus bloques</td>
+<td>Imponer bloques inválidos</td>
+</tr>
+<tr>
+<td>Exchanges y custodios</td>
+<td>Decidir qué cadena reconocen como "Bitcoin" si hay una división; congelar fondos de sus clientes</td>
+<td>Tocar fondos en autocustodia</td>
+</tr>
+<tr>
+<td>Fabricantes de equipos y billeteras</td>
+<td>Definir qué herramientas existen</td>
+<td>Cambiar las reglas</td>
+</tr>
+<tr>
+<td>Usuarios</td>
+<td>Darle valor a una cadena al usarla y aceptarla</td>
+<td>Coordinarse con facilidad</td>
+</tr>
+</tbody>
+</table></div>
+<h2>9.2 Cómo cambian las reglas</h2>
+<p>Un cambio en Bitcoin sigue, en general, este recorrido. Primero se discute en listas de correo y foros técnicos. Si avanza, se escribe como una propuesta formal, llamada <strong>BIP</strong> (<em>Bitcoin Improvement Proposal</em>); que una propuesta tenga número no significa que vaya a aplicarse. Después se escribe el código, se revisa públicamente y, si hay acuerdo técnico amplio, se incorpora a una nueva versión del programa. Cada operador de nodo decide si la instala.</p>
+<p>Los cambios que restringen las reglas (llamados <em>soft forks</em>) suelen activarse cuando una gran mayoría de los mineros señala apoyo durante un período determinado. Taproot, por ejemplo, se activó en noviembre de 2021 de esa forma. Pero las nuevas reglas valen porque los nodos las aplican, no porque los mineros las señalen.</p>
+<p>No es una votación: es un proceso en el que cada actor puede negarse. Un cambio solo prospera si desarrolladores, nodos, mineros y la economía terminan usando el mismo programa. Por eso los cambios en Bitcoin son lentos y conservadores.</p>
+<h2>9.3 Qué pasa cuando hay desacuerdos</h2>
+<p><strong>La guerra del tamaño de bloque (2015-2017).</strong> Una parte de la industria quería bloques más grandes para abaratar las transacciones. Otra prefería mantenerlos chicos, para que verificar la red siguiera siendo barato, y escalar con capas superiores. En 2017, ante la falta de apoyo de los mineros a la actualización SegWit, un grupo de usuarios anunció que sus nodos rechazarían los bloques que no la apoyaran. Los mineros terminaron apoyándola y SegWit se activó en agosto de 2017. Quienes querían bloques grandes crearon su propia cadena, <strong>Bitcoin Cash</strong>, que al año siguiente se dividió otra vez y dio origen a <strong>Bitcoin SV</strong>. Un acuerdo entre empresas para duplicar el tamaño de bloque, llamado SegWit2x, se canceló en noviembre de 2017 por falta de apoyo de usuarios y desarrolladores.</p>
+<p>La lección: en esa disputa, ni la mayoría de los mineros ni los acuerdos empresariales alcanzaron para imponer un cambio que los nodos y los usuarios rechazaban.</p>
+<p><strong>El debate sobre los datos en la cadena (2025-2026).</strong> Bitcoin permite guardar pequeñas cantidades de datos que no son pagos. En octubre de 2025, Bitcoin Core dejó de limitar por defecto el tamaño de esos datos en su política. No fue un cambio en las reglas de consenso: esos bloques ya eran válidos. Una parte de los usuarios lo vio como una puerta a usos no monetarios y migró a <strong>Bitcoin Knots</strong>, un programa alternativo con filtros más estrictos, que llegó a usar entre el 15% y el 25% de los nodos públicos. En agosto de 2026, un grupo intentó imponer una restricción temporal por medio de un soft fork. Tuvo el apoyo de menos del 3% de los mineros, y los nodos que lo aplicaron siguieron una cadena minoritaria que produjo dos bloques y se detuvo.</p>
+<h2>9.4 Riesgos de concentración</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Riesgo</th>
+<th>Descripción</th>
+<th>Contrapeso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Desarrollo</td>
+<td>Bitcoin Core es el programa dominante y tiene pocos mantenedores</td>
+<td>El código es abierto, cualquiera puede copiarlo y hay alternativas</td>
+</tr>
+<tr>
+<td>Financiamiento de desarrolladores</td>
+<td>Depende de fundaciones y empresas del sector</td>
+<td>Hay diversidad de financiadores</td>
+</tr>
+<tr>
+<td>Pools</td>
+<td>Pocos pools arman la mayoría de los bloques</td>
+<td>Los mineros pueden cambiarse de pool; Stratum V2</td>
+</tr>
+<tr>
+<td>Custodia</td>
+<td>ETFs, exchanges y empresas concentran una parte creciente de los bitcoins; los ETFs de EE.UU. tenían unos 1,29 millones (6,1% del total) en octubre de 2026</td>
+<td>La autocustodia sigue disponible</td>
+</tr>
+<tr>
+<td>Presión estatal</td>
+<td>Los gobiernos pueden presionar a exchanges, pools y custodios</td>
+<td>La red principal no requiere intermediarios</td>
+</tr>
+<tr>
+<td>Fabricación de equipos</td>
+<td>Pocos fabricantes</td>
+<td>Aparecen nuevos fabricantes y diseños abiertos</td>
+</tr>
+</tbody>
+</table></div>
+<p>El poder en Bitcoin está repartido de modo que ningún actor puede imponer cambios por su cuenta. Esa es su principal garantía de estabilidad y, al mismo tiempo, la razón por la que mejorar el protocolo lleva tanto tiempo.</p>
+<p class="parte">X. Bitcoin y otras criptomonedas</p>
+<h2>10.1 Algunos conceptos</h2>
+<p>Existen miles de criptomonedas. Para entender en qué se diferencian de Bitcoin, sirven algunos conceptos:</p>
+<ul>
+<li>Un <strong>fork de código</strong> copia el programa de una red y lanza una red nueva desde cero, como hicieron Litecoin (2011) o Dogecoin (2013).</li>
+<li>Un <strong>fork de cadena</strong> divide una cadena existente: las dos comparten el historial hasta el punto de división y después siguen caminos separados, como Bitcoin Cash (2017).</li>
+<li>La <strong>prueba de trabajo</strong> reparte el derecho a producir bloques según el hashrate; la <strong>prueba de participación</strong>, según las monedas que cada uno inmoviliza como garantía.</li>
+<li>Un <strong>token</strong> es un activo registrado sobre la cadena de otra red, sin reglas de consenso propias.</li>
+<li>Una <strong>stablecoin</strong> es un token que busca mantener un valor fijo, generalmente en dólares, respaldado por los activos de una empresa emisora.</li>
+<li>Los <strong>contratos inteligentes</strong> son programas que se ejecutan solos en la cadena, siguiendo reglas automáticas.</li>
+</ul>
+<h2>10.2 Copiar el código no copia Bitcoin</h2>
+<p>Las propiedades de Bitcoin no están solo en su código. Dependen de cuatro cosas que no se pueden copiar: el hashrate acumulado, la cantidad de personas que verifican la red, el acuerdo social sobre sus reglas y una historia de años sin cambios en su política monetaria. Copiar el programa de Bitcoin es como copiar la constitución de un país: el texto se puede reproducir, pero no las instituciones, la historia ni la gente que la respeta.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Red</th>
+<th>Qué cambió respecto de Bitcoin</th>
+<th>Consecuencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Litecoin</td>
+<td>Otro algoritmo de minería, bloques cada 2,5 minutos, tope de 84 millones</td>
+<td>Red independiente, con su propio hashrate</td>
+</tr>
+<tr>
+<td>Dogecoin</td>
+<td>Sin tope de emisión desde 2014</td>
+<td>Inflacionaria por diseño</td>
+</tr>
+<tr>
+<td>Bitcoin Cash</td>
+<td>Bloques más grandes</td>
+<td>Menos hashrate y verificar la red cuesta más</td>
+</tr>
+<tr>
+<td>Bitcoin SV</td>
+<td>Bloques mucho más grandes</td>
+<td>Muchos menos nodos independientes</td>
+</tr>
+<tr>
+<td>Ethereum</td>
+<td>Prueba de participación desde 2022, cuentas con saldo, contratos inteligentes, sin tope fijo de emisión</td>
+<td>Más funciones, más complejidad y una gobernanza más coordinada alrededor de una fundación</td>
+</tr>
+<tr>
+<td>Stablecoins (USDT, USDC)</td>
+<td>Una empresa emisora que puede congelar fondos</td>
+<td>Dependen de esa empresa y de la regulación; no tienen las propiedades monetarias de Bitcoin</td>
+</tr>
+</tbody>
+</table></div>
+<h2>10.3 Ataques del 51% en redes chicas</h2>
+<p>Las redes con poco hashrate propio, cuyos equipos de minería se pueden alquilar, son vulnerables:</p>
+<ul>
+<li><strong>Ethereum Classic</strong> sufrió en enero de 2019 una serie de reescrituras de su cadena con pagos revertidos por unos 219.500 ETC, y en agosto de 2020 ataques que reescribieron miles de bloques.</li>
+<li><strong>Bitcoin Gold</strong> fue atacada en mayo de 2018 y otra vez en enero de 2020.</li>
+</ul>
+<p>Compartir el algoritmo o el código con una red grande no protege. La seguridad depende del hashrate propio.</p>
+<h2>10.4 Prueba de trabajo y prueba de participación</h2>
+<p>La prueba de trabajo usa un recurso externo, la energía, y es más simple y probada, pero consume mucha electricidad. La prueba de participación usa un recurso interno, las propias monedas como garantía: es mucho más eficiente en energía, pero más compleja, y favorece a quien ya tiene más monedas. No hay acuerdo entre los especialistas sobre cuál es superior, porque cada una se apoya en supuestos de seguridad distintos.</p>
+<p class="parte">XI. Objeciones y riesgos</p>
+<p>Estas son las críticas más relevantes que recibe Bitcoin, junto con lo que responden sus defensores.</p>
+<h2>¿Quién pagará la seguridad cuando no haya monedas nuevas?</h2>
+<p>Las comisiones fueron solo el 0,67% de los ingresos de los mineros en los 90 días hasta el 4 de octubre de 2026, y el premio por bloque se reduce a la mitad cada cuatro años. Si las comisiones no crecen, la red podría volverse más vulnerable. Los defensores sostienen que la demanda de espacio en los bloques crecerá con el uso, incluido el de las capas que liquidan en la red principal. Es la objeción técnica y económica más seria, y todavía no tiene una respuesta demostrada.</p>
+<h2>¿Y si llegan las computadoras cuánticas?</h2>
+<p>Una computadora cuántica lo suficientemente potente podría deducir claves privadas a partir de las públicas. Todavía no existe, pero en marzo de 2026 Google redujo de forma importante su estimación de los recursos necesarios. Entre 6 y 7 millones de bitcoins están en direcciones que ya dejaron expuesta su clave pública, incluidos los de los primeros años de la red. Los defensores señalan que la parte de Bitcoin que protege la minería no corre ese riesgo, que ya existen estándares de criptografía resistentes a la computación cuántica (publicados en 2024) y que hay una propuesta (BIP-360) para proteger las direcciones. Pero esa propuesta sigue en borrador, no hay acuerdo sobre qué hacer con las monedas expuestas que nunca se muevan y coordinar una migración en Bitcoin puede llevar años.</p>
+<h2>¿Y si casi todos lo tienen en un ETF?</h2>
+<p>Una parte creciente de los bitcoins está en ETFs, exchanges y empresas. Quien tiene bitcoins a través de un ETF tiene un derecho contra un fondo, no las claves. Si la mayoría de los tenedores usa intermediarios, la resistencia a la censura y a la confiscación existe en la red, pero no para ellos. La autocustodia sigue disponible para quien la quiera, pero su complejidad empuja a muchos usuarios hacia los custodios.</p>
+<h2>El consumo de energía</h2>
+<p>La red consume cerca del 0,5% de la electricidad mundial, y sus equipos generan residuos electrónicos porque quedan obsoletos rápido. Los defensores responden que más de la mitad de esa energía es sostenible, que la minería puede aprovechar energía que de otra forma se desperdiciaría y que funciona como un consumidor flexible para las redes eléctricas. Los datos de la mezcla energética provienen de encuestas a las propias empresas, y el juicio sobre si el consumo vale la pena depende de cuánto valor social se le asigne a la red.</p>
+<h2>La volatilidad y la falta de ingresos</h2>
+<p>Bitcoin tuvo caídas de más del 70% en varios ciclos, y no paga intereses ni dividendos. Los bancos centrales y muchos economistas sostienen que, por eso, no tiene valor fundamental. Los defensores responden que la volatilidad es propia de un activo de oferta fija que todavía está en proceso de adopción, y que el oro tampoco genera ingresos. Que la volatilidad baje con el tiempo es una hipótesis, no un hecho demostrado.</p>
+<h2>La concentración de la minería</h2>
+<p>Dos o tres pools producen más de la mitad de los bloques, y pocos fabricantes producen los equipos. Los defensores responden que los mineros pueden cambiarse de pool, que los nodos limitan lo que los mineros pueden hacer y que Stratum V2 devuelve a cada minero el armado de sus bloques. Pero su adopción es parcial y la concentración de pools persiste desde hace años.</p>
+<p class="parte">XII. Síntesis</p>
+<h2>12.1 Cómo se conecta todo</h2>
+<p><strong>La escasez digital es distinta de la física.</strong> El oro es escaso porque extraerlo es costoso, pero nadie sabe con exactitud cuánto existe, y se produce más cuando sube su precio. La escasez de Bitcoin es una regla: no responde al precio y cualquiera puede verificarla. Esa diferencia es la base de la tesis monetaria, y también su punto sensible: una regla depende de que se siga aplicando.</p>
+<p><strong>El costo de producción no determina el valor.</strong> Gracias al ajuste de dificultad, el costo de minar se adapta a lo que se gana. El valor surge de la demanda; el costo lo sigue.</p>
+<p><strong>La descentralización tiene un precio.</strong> Bloques chicos y reglas estables permiten que cualquiera verifique la red, pero limitan su capacidad y hacen lentos los cambios. Bitcoin eligió que verificar fuera accesible antes que procesar más transacciones, y trasladó la escala a capas superiores, con sus propios riesgos.</p>
+<p><strong>Las reglas eliminan la discrecionalidad, no todos los riesgos.</strong> Nadie puede emitir más bitcoins por decisión propia. Pero siguen existiendo riesgos de software, de concentración, regulatorios, de custodia y de seguridad a largo plazo.</p>
+<p><strong>Tener las claves no es controlar la red.</strong> Quien tiene las claves controla sus fondos, no las reglas. Quien tiene mucho hashrate puede ordenar transacciones, pero no cambiar las reglas. Nadie controla las dos cosas a la vez.</p>
+<p><strong>Técnica, incentivos y acuerdo social se sostienen entre sí.</strong> La criptografía protege la propiedad; la prueba de trabajo vuelve costoso reescribir la historia; los incentivos alinean a los mineros; y el acuerdo social define qué reglas son Bitcoin. Si una de las cuatro falla, las otras tres no alcanzan.</p>
+<h2>12.2 Los fundamentos esenciales</h2>
+<ol>
+<li>Bitcoin resuelve el doble gasto sin una autoridad central, combinando un registro público, la prueba de trabajo, la regla de la cadena con más trabajo y los incentivos económicos.</li>
+<li>La propiedad de los fondos se prueba con firmas digitales; la integridad del historial, con hashes encadenados.</li>
+<li>Los nodos aplican las reglas; los mineros ordenan las transacciones. Ninguno puede imponer bloques inválidos.</li>
+<li>La oferta máxima es de 20.999.999,9769 bitcoins, y cualquiera puede verificarla.</li>
+<li>Cada confirmación vuelve mucho más difícil revertir un pago, aunque nunca de forma absoluta.</li>
+<li>La privacidad es seudónima: en el océano nadie pide documentos, pero el océano es de vidrio.</li>
+<li>Tener las claves es controlar los fondos; tener un saldo en un intermediario es tener una promesa.</li>
+<li>Las reglas cambian solo cuando desarrolladores, nodos, mineros y usuarios convergen.</li>
+<li>Copiar el código de Bitcoin no copia su seguridad ni su historia.</li>
+<li>Las grandes preguntas abiertas son quién pagará la seguridad en el futuro, cómo se migrará ante la computación cuántica, la concentración y la vuelta de los intermediarios.</li>
+</ol>
+<p class="parte">Glosario</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Definición</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ASIC</td>
+<td>Equipo diseñado para una sola tarea; en Bitcoin, minar</td>
+<td>Las máquinas de minería actuales</td>
+</tr>
+<tr>
+<td>Altura de bloque</td>
+<td>Número de orden de un bloque desde el primero</td>
+<td>El bloque 840.000 marcó el halving de 2024</td>
+</tr>
+<tr>
+<td>BIP</td>
+<td>Propuesta formal de mejora de Bitcoin</td>
+<td>BIP-141 definió SegWit</td>
+</tr>
+<tr>
+<td>Billetera</td>
+<td>Programa o dispositivo que guarda claves y firma transacciones</td>
+<td>Una app en el teléfono o un dispositivo físico</td>
+</tr>
+<tr>
+<td>Bloque</td>
+<td>Conjunto de transacciones enlazado al bloque anterior</td>
+<td>Se agrega uno cada 10 minutos en promedio</td>
+</tr>
+<tr>
+<td>Bloque génesis</td>
+<td>Primer bloque de la cadena, del 3 de enero de 2009</td>
+<td>Incluye un titular de <em>The Times</em></td>
+</tr>
+<tr>
+<td>Blockchain</td>
+<td>Registro de todas las transacciones, organizado en bloques encadenados</td>
+<td>El "océano" de la metáfora</td>
+</tr>
+<tr>
+<td>Cadena con más trabajo</td>
+<td>Regla para elegir el historial válido</td>
+<td>Ante dos ramas, gana la que acumula más trabajo</td>
+</tr>
+<tr>
+<td>Censura</td>
+<td>Exclusión deliberada de transacciones</td>
+<td>Un pool que no incluye ciertos pagos</td>
+</tr>
+<tr>
+<td>Clave privada</td>
+<td>Número secreto que permite gastar los fondos</td>
+<td>La "llave"</td>
+</tr>
+<tr>
+<td>Clave pública</td>
+<td>Dato derivado de la clave privada que permite verificar firmas</td>
+<td>El "candado"</td>
+</tr>
+<tr>
+<td>CoinJoin</td>
+<td>Transacción conjunta de varias personas para mejorar la privacidad</td>
+<td>Cinco usuarios combinan sus pagos en uno</td>
+</tr>
+<tr>
+<td>Comisión</td>
+<td>Lo que se le paga al minero por incluir una transacción</td>
+<td>705 satoshis por una transacción típica</td>
+</tr>
+<tr>
+<td>Confirmación</td>
+<td>Inclusión de una transacción en un bloque; cada bloque posterior suma una</td>
+<td>"Esperar 6 confirmaciones"</td>
+</tr>
+<tr>
+<td>Consenso</td>
+<td>Acuerdo de la red sobre cuál es el historial válido</td>
+<td>Todos los nodos ven los mismos saldos</td>
+</tr>
+<tr>
+<td>Dificultad</td>
+<td>Medida de cuán difícil es encontrar un bloque</td>
+<td>Se ajusta cada 2.016 bloques</td>
+</tr>
+<tr>
+<td>Doble gasto</td>
+<td>Intento de gastar dos veces la misma moneda</td>
+<td>Pagarle a Bruno y a Carla con los mismos fondos</td>
+</tr>
+<tr>
+<td>Exchange</td>
+<td>Plataforma para cambiar bitcoins por otras monedas</td>
+<td>Un "puerto" de la metáfora</td>
+</tr>
+<tr>
+<td>Firma digital</td>
+<td>Prueba de que el dueño de una clave autorizó un pago</td>
+<td>Un sello imposible de falsificar</td>
+</tr>
+<tr>
+<td>Fork</td>
+<td>División del código o de la cadena</td>
+<td>Bitcoin Cash en 2017</td>
+</tr>
+<tr>
+<td>Frase semilla</td>
+<td>12 o 24 palabras que permiten reconstruir una billetera</td>
+<td>La "llave maestra"</td>
+</tr>
+<tr>
+<td>Halving</td>
+<td>Reducción a la mitad del premio por bloque cada 210.000 bloques</td>
+<td>De 6,25 a 3,125 BTC en 2024</td>
+</tr>
+<tr>
+<td>Hard fork</td>
+<td>Cambio de reglas incompatible con las versiones anteriores</td>
+<td>Aumentar el tamaño máximo de los bloques</td>
+</tr>
+<tr>
+<td>Hash</td>
+<td>Huella digital de un conjunto de datos</td>
+<td>La "licuadora" de datos</td>
+</tr>
+<tr>
+<td>Hashrate</td>
+<td>Capacidad de cómputo de la red: intentos de hash por segundo</td>
+<td>Unos 1.000 exahashes por segundo en 2026</td>
+</tr>
+<tr>
+<td>Lightning Network</td>
+<td>Red de canales de pago construida sobre Bitcoin</td>
+<td>Pagar un café al instante</td>
+</tr>
+<tr>
+<td>Mempool</td>
+<td>Sala de espera de las transacciones no confirmadas</td>
+<td>Transacciones esperando entrar en un bloque</td>
+</tr>
+<tr>
+<td>Árbol de Merkle</td>
+<td>Estructura que resume miles de transacciones en un solo hash</td>
+<td>Un torneo por eliminación de hashes</td>
+</tr>
+<tr>
+<td>Minero</td>
+<td>Quien produce bloques gastando energía</td>
+<td>Una empresa con miles de equipos</td>
+</tr>
+<tr>
+<td>Multisig</td>
+<td>Condición que exige varias firmas para gastar</td>
+<td>Dos llaves de tres</td>
+</tr>
+<tr>
+<td>Nodo</td>
+<td>Programa que verifica todas las reglas por su cuenta</td>
+<td>El "árbitro" de la red</td>
+</tr>
+<tr>
+<td>Pool de minería</td>
+<td>Grupo de mineros que suman hashrate y reparten premios</td>
+<td>Foundry, AntPool</td>
+</tr>
+<tr>
+<td>Prueba de trabajo</td>
+<td>Evidencia de que se gastó energía para producir un bloque</td>
+<td>La "lotería" de la minería</td>
+</tr>
+<tr>
+<td>Reorganización</td>
+<td>Cambio de rama cuando aparece otra con más trabajo</td>
+<td>La de dos bloques de marzo de 2026</td>
+</tr>
+<tr>
+<td>Satoshi</td>
+<td>Unidad mínima de Bitcoin</td>
+<td>Un bitcoin = 100 millones de satoshis</td>
+</tr>
+<tr>
+<td>Script</td>
+<td>Lenguaje con el que se escriben las condiciones para gastar</td>
+<td>La "cerradura con instrucciones"</td>
+</tr>
+<tr>
+<td>SegWit</td>
+<td>Actualización de 2017 que abarató las transacciones</td>
+<td>Direcciones que empiezan con <code>bc1q</code></td>
+</tr>
+<tr>
+<td>Seudonimato</td>
+<td>Identidad oculta detrás de un alias que puede vincularse con una persona</td>
+<td>Una dirección no dice quién es su dueño</td>
+</tr>
+<tr>
+<td>SHA-256</td>
+<td>Función hash que usa Bitcoin</td>
+<td>La que se usa para minar</td>
+</tr>
+<tr>
+<td>Soft fork</td>
+<td>Cambio que restringe las reglas y es compatible con versiones anteriores</td>
+<td>Taproot</td>
+</tr>
+<tr>
+<td>Taproot</td>
+<td>Actualización de 2021 que mejoró la privacidad y la eficiencia</td>
+<td>Direcciones que empiezan con <code>bc1p</code></td>
+</tr>
+<tr>
+<td>UTXO</td>
+<td>Salida no gastada; el "billete" de Bitcoin</td>
+<td>Los 500.000 satoshis de Ana</td>
+</tr>
+</tbody>
+</table></div>
+<p class="parte">Errores conceptuales frecuentes</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Corrección</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Bitcoin es anónimo"</td>
+<td>Es seudónimo: la blockchain es pública y las direcciones pueden vincularse con personas (sección VIII)</td>
+</tr>
+<tr>
+<td>"Los mineros controlan Bitcoin"</td>
+<td>Los mineros ordenan transacciones, pero los nodos verifican las reglas y rechazan los bloques inválidos (sección IV)</td>
+</tr>
+<tr>
+<td>"El límite de 21 millones no se puede cambiar"</td>
+<td>Es una regla sostenida por el acuerdo social y por los incentivos; cambiarla exigiría que la mayoría aceptara algo que va contra sus propios intereses (sección V)</td>
+</tr>
+<tr>
+<td>"Los bitcoins están guardados en la billetera"</td>
+<td>Los bitcoins están registrados en la blockchain; la billetera guarda las claves (sección III)</td>
+</tr>
+<tr>
+<td>"Minar es resolver problemas matemáticos complejos"</td>
+<td>Es probar al azar, una y otra vez, hasta encontrar un hash válido, después de armar un bloque que cumpla todas las reglas (sección III)</td>
+</tr>
+<tr>
+<td>"Una transacción confirmada es definitiva"</td>
+<td>Cada bloque vuelve la reversión mucho más improbable, pero nunca imposible en sentido absoluto (sección II)</td>
+</tr>
+<tr>
+<td>"Bitcoin y blockchain son lo mismo"</td>
+<td>Bitcoin es una red con reglas propias; "blockchain" es un tipo de registro que otras redes usan con propiedades distintas (sección X)</td>
+</tr>
+<tr>
+<td>"Tener un ETF de bitcoin es tener bitcoin"</td>
+<td>Un ETF da un derecho contra un fondo; tener las claves da control directo (sección VIII)</td>
+</tr>
+<tr>
+<td>"El costo de minar fija el valor de Bitcoin"</td>
+<td>El costo sigue al valor gracias al ajuste de dificultad; no lo determina (sección VII)</td>
+</tr>
+<tr>
+<td>"Hackearon Bitcoin"</td>
+<td>Los robos conocidos afectaron a exchanges, billeteras o redes construidas encima; la criptografía y el consenso de la red principal nunca fueron vulnerados (sección IV)</td>
+</tr>
+</tbody>
+</table></div>
+<p class="parte">Bibliografía y fuentes</p>
+<h2>Lecturas recomendadas</h2>
+<ol>
+<li>Nakamoto, S. (2008). <em>Bitcoin: A Peer-to-Peer Electronic Cash System</em>. <a target="_blank" rel="noopener" href="https://bitcoin.org/bitcoin.pdf">https://bitcoin.org/bitcoin.pdf</a>. El documento original; conviene leerlo teniendo en cuenta lo que cambió desde entonces.</li>
+<li>Antonopoulos, A. M. y Harding, D. A. (2023). <em>Mastering Bitcoin</em>, 3.ª ed. O'Reilly. <a target="_blank" rel="noopener" href="https://github.com/bitcoinbook/bitcoinbook">https://github.com/bitcoinbook/bitcoinbook</a>. La referencia técnica más completa y actualizada; disponible gratis en GitHub.</li>
+<li>Narayanan, A., Bonneau, J., Felten, E., Miller, A. y Goldfeder, S. (2016). <em>Bitcoin and Cryptocurrency Technologies</em>. Princeton University Press. <a target="_blank" rel="noopener" href="https://bitcoinbook.cs.princeton.edu">https://bitcoinbook.cs.princeton.edu</a>. Libro de texto universitario, riguroso y accesible.</li>
+<li>Pritzker, Y. (2019). <em>Inventing Bitcoin</em>. Una introducción breve y conceptual, ideal para empezar.</li>
+<li>Popper, N. (2015). <em>Digital Gold</em>. La historia de los primeros años, contada como una crónica periodística.</li>
+<li>Bier, J. (2021). <em>The Blocksize War</em>. El relato de la disputa de 2015-2017, desde la postura de los bloques chicos.</li>
+<li>Ammous, S. (2018). <em>The Bitcoin Standard</em>. Wiley. La exposición más difundida de la tesis monetaria de Bitcoin; recibió críticas por errores históricos y económicos, por lo que conviene leerla junto con sus reseñas.</li>
+</ol>
+<h2>Documentos técnicos</h2>
+<ol start="8">
+<li>Escritos de Satoshi Nakamoto (correos y foros). <a target="_blank" rel="noopener" href="https://satoshi.nakamotoinstitute.org">https://satoshi.nakamotoinstitute.org</a></li>
+<li>Bitcoin Core, código fuente. <a target="_blank" rel="noopener" href="https://github.com/bitcoin/bitcoin">https://github.com/bitcoin/bitcoin</a></li>
+<li>Bitcoin Core, notas de versión 28.0, 29.1 y 30.0. <a target="_blank" rel="noopener" href="https://bitcoincore.org/en/releases/">https://bitcoincore.org/en/releases/</a></li>
+<li>Repositorio de propuestas de mejora (BIP). <a target="_blank" rel="noopener" href="https://github.com/bitcoin/bips">https://github.com/bitcoin/bips</a></li>
+<li>Bitcoin Optech, boletines técnicos semanales. <a target="_blank" rel="noopener" href="https://bitcoinops.org">https://bitcoinops.org</a></li>
+<li>Especificaciones de Lightning Network (BOLTs). <a target="_blank" rel="noopener" href="https://github.com/lightning/bolts">https://github.com/lightning/bolts</a></li>
+<li>NIST (2015). FIPS 180-4, <em>Secure Hash Standard</em> (SHA-256). <a target="_blank" rel="noopener" href="https://csrc.nist.gov/pubs/fips/180-4/upd1/final">https://csrc.nist.gov/pubs/fips/180-4/upd1/final</a></li>
+<li>NIST (2024). FIPS 203, 204 y 205, estándares de criptografía post-cuántica. <a target="_blank" rel="noopener" href="https://csrc.nist.gov/pubs/fips/204/final">https://csrc.nist.gov/pubs/fips/204/final</a></li>
+</ol>
+<h2>Artículos académicos</h2>
+<ol start="16">
+<li>Douceur, J. R. (2002). "The Sybil Attack". IPTPS.</li>
+<li>Eyal, I. y Sirer, E. G. (2013). "Majority is not Enough: Bitcoin Mining is Vulnerable". <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1311.0243">https://arxiv.org/abs/1311.0243</a></li>
+<li>Meiklejohn, S. et al. (2013). "A Fistful of Bitcoins: Characterizing Payments Among Men with No Names". ACM IMC. <a target="_blank" rel="noopener" href="https://cseweb.ucsd.edu/~smeiklejohn/files/imc13.pdf">https://cseweb.ucsd.edu/~smeiklejohn/files/imc13.pdf</a></li>
+<li>Heilman, E., Kendler, A., Zohar, A. y Goldberg, S. (2015). "Eclipse Attacks on Bitcoin's Peer-to-Peer Network". USENIX Security. <a target="_blank" rel="noopener" href="https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/heilman">https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/heilman</a></li>
+<li>Carlsten, M., Kalodner, H., Weinberg, S. M. y Narayanan, A. (2016). "On the Instability of Bitcoin Without the Block Reward". ACM CCS.</li>
+<li>Budish, E. (2018). "The Economic Limits of Bitcoin and the Blockchain". NBER Working Paper 24717. <a target="_blank" rel="noopener" href="https://www.nber.org/papers/w24717">https://www.nber.org/papers/w24717</a></li>
+<li>Gencer, A. E., Basu, S., Eyal, I., van Renesse, R. y Sirer, E. G. (2018). "Decentralization in Bitcoin and Ethereum Networks". <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1801.03998">https://arxiv.org/abs/1801.03998</a></li>
+<li>de Vries, A. y Stoll, C. (2021). "Bitcoin's growing e-waste problem". <em>Resources, Conservation and Recycling</em>, 175.</li>
+</ol>
+<h2>Historia y teoría monetaria</h2>
+<ol start="24">
+<li>Dai, W. (1998). "b-money". <a target="_blank" rel="noopener" href="http://www.weidai.com/bmoney.txt">http://www.weidai.com/bmoney.txt</a></li>
+<li>Szabo, N. (2005). "Bit gold". <a target="_blank" rel="noopener" href="https://unenumerated.blogspot.com/2005/12/bit-gold.html">https://unenumerated.blogspot.com/2005/12/bit-gold.html</a></li>
+<li>Back, A. (2002). "Hashcash - A Denial of Service Counter-Measure". <a target="_blank" rel="noopener" href="http://www.hashcash.org/papers/hashcash.pdf">http://www.hashcash.org/papers/hashcash.pdf</a></li>
+<li>Chaum, D. (1983). "Blind Signatures for Untraceable Payments". <em>Advances in Cryptology: Proceedings of Crypto 82</em>. <a target="_blank" rel="noopener" href="https://doi.org/10.1007/978-1-4757-0602-4_18">https://doi.org/10.1007/978-1-4757-0602-4_18</a></li>
+<li>Hughes, E. (1993). <em>A Cypherpunk's Manifesto</em>. <a target="_blank" rel="noopener" href="https://www.activism.net/cypherpunk/manifesto.html">https://www.activism.net/cypherpunk/manifesto.html</a></li>
+<li>Menger, C. (1892). "On the Origin of Money". <em>The Economic Journal</em>, 2(6). <a target="_blank" rel="noopener" href="https://doi.org/10.2307/2956146">https://doi.org/10.2307/2956146</a></li>
+<li>McLeay, M., Radia, A. y Thomas, R. (2014). "Money creation in the modern economy". Bank of England Quarterly Bulletin. <a target="_blank" rel="noopener" href="https://www.bankofengland.co.uk/quarterly-bulletin/2014/q1/money-creation-in-the-modern-economy">https://www.bankofengland.co.uk/quarterly-bulletin/2014/q1/money-creation-in-the-modern-economy</a></li>
+</ol>
+<h2>Informes y posturas institucionales</h2>
+<ol start="31">
+<li>Bank for International Settlements (2018). <em>Annual Economic Report</em>, cap. V, "Cryptocurrencies: looking beyond the hype". <a target="_blank" rel="noopener" href="https://www.bis.org/publ/arpdf/ar2018e5.htm">https://www.bis.org/publ/arpdf/ar2018e5.htm</a></li>
+<li>Bindseil, U. y Schaaf, J. (2022). "Bitcoin's last stand"; (2024). "ETF approval for bitcoin – the naked emperor's new clothes". Blog del Banco Central Europeo.</li>
+<li>Cambridge Centre for Alternative Finance (2025). <em>Cambridge Digital Mining Industry Report</em>. <a target="_blank" rel="noopener" href="https://www.jbs.cam.ac.uk/wp-content/uploads/2025/04/2025-04-cambridge-digital-mining-industry-report.pdf">https://www.jbs.cam.ac.uk/wp-content/uploads/2025/04/2025-04-cambridge-digital-mining-industry-report.pdf</a></li>
+<li>Cambridge Centre for Alternative Finance y Fii (2026). <em>Funding Bitcoin's Future</em>. <a target="_blank" rel="noopener" href="https://www.jbs.cam.ac.uk/2026/paying-for-bitcoins-security-as-the-subsidy-fades/">https://www.jbs.cam.ac.uk/2026/paying-for-bitcoins-security-as-the-subsidy-fades/</a></li>
+<li>Orden Ejecutiva 14233 de EE.UU. (2025). Reserva Estratégica de Bitcoin. <a target="_blank" rel="noopener" href="https://www.govinfo.gov/content/pkg/DCPD-202500335/pdf/DCPD-202500335.pdf">https://www.govinfo.gov/content/pkg/DCPD-202500335/pdf/DCPD-202500335.pdf</a></li>
+<li>IRS Criminal Investigation (2025). Condena a los fundadores de Samourai Wallet. <a target="_blank" rel="noopener" href="https://www.irs.gov/compliance/criminal-investigation/founders-of-samourai-wallet-cryptocurrency-mixing-service-sentenced-to-five-and-four-years-in-prison">https://www.irs.gov/compliance/criminal-investigation/founders-of-samourai-wallet-cryptocurrency-mixing-service-sentenced-to-five-and-four-years-in-prison</a></li>
+</ol>
+<h2>Datos de la red y del mercado</h2>
+<ol start="37">
+<li>mempool.space (bloques, comisiones, minería). <a target="_blank" rel="noopener" href="https://mempool.space">https://mempool.space</a></li>
+<li>Bitnodes (nodos públicos). <a target="_blank" rel="noopener" href="https://bitnodes.io">https://bitnodes.io</a></li>
+<li>Coin Dance (programas usados por los nodos). <a target="_blank" rel="noopener" href="https://coin.dance/nodes">https://coin.dance/nodes</a></li>
+<li>Bitbo (tenencias de los ETFs de bitcoin). <a target="_blank" rel="noopener" href="https://bitbo.io/treasuries/us-etfs/">https://bitbo.io/treasuries/us-etfs/</a></li>
+<li>World Gold Council, Goldhub (stock y producción de oro). <a target="_blank" rel="noopener" href="https://www.gold.org/goldhub">https://www.gold.org/goldhub</a></li>
+<li>Chainalysis (2020) y River (2025), estimaciones de bitcoins perdidos. <a target="_blank" rel="noopener" href="https://river.com/content/how-much-bitcoin-is-gone-forever">https://river.com/content/how-much-bitcoin-is-gone-forever</a></li>
+<li>CoinDesk (31-mar-2026). Cobertura del trabajo de Google Quantum AI sobre computación cuántica y criptografía. <a target="_blank" rel="noopener" href="https://www.coindesk.com/tech/2026/03/31/bitcoin-bulls-scramble-for-post-quantum-protection-as-google-drops-bombshell-paper">https://www.coindesk.com/tech/2026/03/31/bitcoin-bulls-scramble-for-post-quantum-protection-as-google-drops-bombshell-paper</a></li>
+<li>The Block (24-mar-2026). Reorganización de dos bloques. <a target="_blank" rel="noopener" href="https://www.theblock.co/news/ecosystems/2026-03-24-bitcoin-sees-rare-two-block-reorg-as-foundry-overtakes-antpool-and-viabtc-in-mining-race-394861">https://www.theblock.co/news/ecosystems/2026-03-24-bitcoin-sees-rare-two-block-reorg-as-foundry-overtakes-antpool-and-viabtc-in-mining-race-394861</a></li>
+</ol>
+<p><strong>Este material no es una recomendación de inversión.</strong></p>
+</template>
+
 <!-- Criterios: se insertan en cada informe, después del resumen ejecutivo -->
 <template id="criterios">
 <h2>Cómo leer este informe: criterios y banderas</h2>
@@ -639,7 +2329,7 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
   const informes=[...document.querySelectorAll("template.informe-src")].map(t=>{
     const d=t.dataset;
     return {id:d.id,ticker:d.ticker,empresa:d.empresa,par:d.par||"",fecha:d.fecha,tipo:d.tipo||"",
-      que:d.que,queRazon:d.queRazon||"",cuando:d.cuando,cuandoRazon:d.cuandoRazon||"",tpl:t,
+      que:d.que,queRazon:d.queRazon||"",resumen:d.resumen||"",cuando:d.cuando,cuandoRazon:d.cuandoRazon||"",tpl:t,
       texto:(d.ticker+" "+d.empresa+" "+(d.par||"")+" "+t.content.textContent).toLowerCase()};
   }).sort((a,b)=>b.fecha.localeCompare(a.fecha));
 
@@ -648,7 +2338,7 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
   const avisoFecha=$("aviso-fecha");
   let tickerSel="";
 
-  const veredictos=r=>`<div class="veredictos">
+  const veredictos=r=>!r.que?`<div class="veredictos"><div class="vd"><span class="vd-l">Informe educativo <small>· fundamentos, sin veredicto de compra</small></span><p class="razon">${esc(r.resumen)}</p></div></div>`:`<div class="veredictos">
     <div class="vd"><span class="vd-l">QUÉ comprar <small>· análisis fundamental</small></span><span class="tag ${r.que}">${ETQ_QUE[r.que]||r.que}</span><p class="razon">${esc(r.queRazon)}</p></div>
     <div class="vd"><span class="vd-l">CUÁNDO comprar <small>· análisis técnico</small></span><span class="tag ${r.cuando}">${ETQ_CUANDO[r.cuando]||r.cuando}</span><p class="razon">${esc(r.cuandoRazon)}</p></div>
   </div>`;
@@ -687,7 +2377,7 @@ Para agregar uno: copiar un <template class="informe-src">, cambiar los data-* y
       const inf=$("detalle").querySelector(".informe");
       inf.appendChild(r.tpl.content.cloneNode(true));
       const crit=document.getElementById("criterios");
-      if(crit){const c=crit.content.cloneNode(true);const res=inf.querySelector(".caja");res?res.after(c):inf.prepend(c);}
+      if(crit&&r.que){const c=crit.content.cloneNode(true);const res=inf.querySelector(".caja");res?res.after(c):inf.prepend(c);}
       avisoFecha.textContent=`Datos al ${fmt(r.fecha)}`;
       window.scrollTo(0,0);
     } else pintarLista();
